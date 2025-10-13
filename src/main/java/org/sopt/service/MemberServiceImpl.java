@@ -25,4 +25,11 @@ public class MemberServiceImpl implements  MemberService{
     public List<Member> findAllMembers() {
         return memberRepository.findAll();
     }
+
+    public void deleteMember(Long memberId) {
+        if(!memberRepository.existById(memberId)) {
+            throw new IllegalArgumentException("⚠️ 해당 ID의 회원이 존재하지 않습니다.");
+        }
+        memberRepository.deleteById(memberId);
+    }
 }
