@@ -17,8 +17,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-        MemberServiceImpl memberServiceImpl = new MemberServiceImpl();
         MemberController memberController = new MemberController();
 
         Scanner scanner = new Scanner(System.in);
@@ -61,15 +59,21 @@ public class Main {
                             System.out.println("⚠️ 형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:");
                         }
                     }
+                    List<Member> members = memberController.getAllMembers();
+                    List<String> emails = members.stream().map(Member::getEmail).toList();
                     System.out.print("회원님의 이메일을 입력하세요: ");
                     String email=scanner.nextLine();
                     String check_email = "^[A-Za-z0-9]+@[A-Za-z0-9.]+$";
                     while(true){
-                        if(email.matches(check_email)){
+                        if(email.matches(check_email) && !emails.contains(email)){
                             break;
                         }
-                        else{
+                        else if(!email.matches(check_email)){
                             System.out.println("⚠️ 형식이 올바르지 않습니다. 올바른 이메일 형식으로 다시 입력해주세요: ");
+                            email=scanner.nextLine();
+                        }
+                        else {
+                            System.out.println("⚠️ 중복된 이메일입니다. 다시 입력해주세요:");
                             email=scanner.nextLine();
                         }
                     }
