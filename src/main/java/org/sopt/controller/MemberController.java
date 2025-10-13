@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public class MemberController {
 
-    private MemberServiceImpl memberServiceImpl = new MemberServiceImpl();
+    private final MemberServiceImpl memberServiceImpl = new MemberServiceImpl();
 
-    public Long createMember(String name) {
+    public Long createMember(String name,String birth,String email,Member.Gender gender) {
 
-        return memberServiceImpl.join(name);
+        return memberServiceImpl.join(name,birth,email,gender);
     }
 
     public Optional<Member> findMemberById(Long id) {
