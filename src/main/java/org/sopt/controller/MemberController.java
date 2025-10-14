@@ -25,4 +25,7 @@ public class MemberController {
     }
 
     public void deleteMemberById(Long id) {memberServiceImpl.deleteMember(id);}
-}
+
+    public boolean existsByEmail(String email) {
+        return memberServiceImpl.existsByEmail(email);}
+    }

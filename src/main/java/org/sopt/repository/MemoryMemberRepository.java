@@ -29,9 +29,13 @@ public class MemoryMemberRepository {
 
     public void deleteById(Long id){
         store.remove(id);
-    };
+    }
 
     public boolean existById(Long id) {
         return store.containsKey(id);
+    }
+
+    public boolean existsByEmail(String email) {
+        return store.values().stream().anyMatch(member -> member.getEmail().equals(email));
     }
 }

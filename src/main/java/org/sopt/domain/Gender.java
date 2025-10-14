@@ -4,7 +4,7 @@ public enum Gender {
     MALE("남성"),
     FEMALE("여성");
 
-    private String label;
+    private final String label;
 
     Gender(String label) {
         this.label = label;

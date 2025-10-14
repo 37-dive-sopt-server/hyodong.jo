@@ -44,6 +44,7 @@ public class Main {
                         System.out.println("⚠️ 이름을 입력해주세요.");
                         continue;
                     }
+
                     System.out.print("회원님의 생년월일을 입력하세요(yyyy-MM-dd 형식):");
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate birthDate;
@@ -61,25 +62,27 @@ public class Main {
                             System.out.println("⚠️ 형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:");
                         }
                     }
-                    List<Member> members = memberController.getAllMembers();
-                    List<String> emails = members.stream().map(Member::getEmail).toList();
                     System.out.print("회원님의 이메일을 입력하세요: ");
-                    String email=scanner.nextLine();
                     String check_email = "^[A-Za-z0-9]+@[A-Za-z0-9.]+$";
-                    while(true){
-                        if(email.matches(check_email) && !emails.contains(email)){
+                    String email;
+                    while(true) {
+                        try {
+                            email = scanner.nextLine();
+                            if (!email.matches(check_email)) {
+                                System.out.print("⚠️ 형식이 올바르지 않습니다. 올바른 이메일 형식으로 다시 입력해주세요: ");
+                                continue;
+                            }
+                            if (memberController.existsByEmail(email)){
+                                System.out.print("⚠️ 이미 등록된 이메일입니다. 다른 이메일을 입력해주세요: ");
+                                continue;
+                            }
                             break;
-                        }
-                        else if(!email.matches(check_email)){
-                            System.out.println("⚠️ 형식이 올바르지 않습니다. 올바른 이메일 형식으로 다시 입력해주세요: ");
-                            email=scanner.nextLine();
-                        }
-                        else {
-                            System.out.println("⚠️ 중복된 이메일입니다. 다시 입력해주세요:");
-                            email=scanner.nextLine();
+                            }
+                        catch(IllegalStateException e) {
+                            System.out.println(e.getMessage());
                         }
                     }
-                    System.out.println("회원님의 성별을 선택 해주세요:");
+                    System.out.println("회원님의 성별을 선택 해주세요");
                     System.out.print("1번은 남성, 2번은 여성입니다. 1 또는 2를 입력해주세요(숫자만 입력해주세요): ");
                     Gender gender;
                     while(true){

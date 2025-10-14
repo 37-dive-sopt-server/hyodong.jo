@@ -15,4 +15,6 @@ public interface MemberService {
     List<Member> findAllMembers();
 
     void deleteMember(Long memberId);
+
+    boolean existsByEmail(String email);
 }
