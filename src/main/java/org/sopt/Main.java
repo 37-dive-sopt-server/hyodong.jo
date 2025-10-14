@@ -95,12 +95,16 @@ public class Main {
                             System.out.println("⚠️ 잘못된 입력 값입니다. 1 또는 2를 입력해주세요.");
                         }
                     }
-
-                    Long createdId = memberController.createMember(name,birth,email,gender);
-                    if (createdId != null) {
-                        System.out.println("✅ 회원 등록 완료 (ID: " + createdId + ")");
-                    } else {
-                        System.out.println("❌ 회원 등록 실패");
+                    try{
+                        Long createdId = memberController.createMember(name,birth,email,gender);
+                        if (createdId != null) {
+                            System.out.println("✅ 회원 등록 완료 (ID: " + createdId + ")");
+                        } else {
+                            System.out.println("❌ 회원 등록 실패");
+                        }
+                    }
+                    catch(IllegalArgumentException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "2":

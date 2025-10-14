@@ -3,6 +3,7 @@ package org.sopt.service;
 import org.sopt.domain.Member;
 import org.sopt.repository.MemoryMemberRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,10 @@ public class MemberServiceImpl implements  MemberService{
     private static long sequence = 1L;
 
     public Long join(String name, String birth, String email, Member.Gender gender) {
-
+        int age = LocalDate.now().getYear() - LocalDate.parse(birth).getYear();
+        if( age < 20){
+            throw new IllegalArgumentException("❌ 19세 이하는 가입이 불가능합니다.");
+        }
         Member member = new Member(sequence++, name,birth,email,gender);
         memberRepository.save(member);
         return member.getId();
