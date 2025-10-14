@@ -1,5 +1,6 @@
 package org.sopt.service;
 
+import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
 import org.sopt.repository.MemoryMemberRepository;
 
@@ -12,7 +13,7 @@ public class MemberServiceImpl implements  MemberService{
     private final MemoryMemberRepository memberRepository = new MemoryMemberRepository();
     private static long sequence = 1L;
 
-    public Long join(String name, String birth, String email, Member.Gender gender) {
+    public Long join(String name, String birth, String email, Gender gender) {
         int age = LocalDate.now().getYear() - LocalDate.parse(birth).getYear();
         if( age < 20){
             throw new IllegalArgumentException("❌ 19세 이하는 가입이 불가능합니다.");

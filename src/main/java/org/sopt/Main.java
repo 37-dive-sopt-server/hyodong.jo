@@ -1,6 +1,7 @@
 package org.sopt;
 
 import org.sopt.controller.MemberController;
+import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
 import org.sopt.repository.MemoryMemberRepository;
 import org.sopt.service.MemberServiceImpl;
@@ -80,15 +81,15 @@ public class Main {
                     }
                     System.out.println("회원님의 성별을 선택 해주세요:");
                     System.out.print("1번은 남성, 2번은 여성입니다. 1 또는 2를 입력해주세요(숫자만 입력해주세요): ");
-                    Member.Gender gender;
+                    Gender gender;
                     while(true){
                         String input = scanner.nextLine();
                         if(input.equals("1")){
-                            gender = Member.Gender.MALE;
+                            gender = Gender.MALE;
                             break;
                         }
                         else if(input.equals("2")){
-                            gender = Member.Gender.FEMALE;
+                            gender = Gender.FEMALE;
                             break;
                         }
                         else{
