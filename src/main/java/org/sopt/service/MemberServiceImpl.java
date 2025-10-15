@@ -18,11 +18,11 @@ public class MemberServiceImpl implements  MemberService{
 
     public Long join(String name, String birth, String email, Gender gender) {
         if(memberRepository.existsByEmail(email)) {
-            throw new DuplicateEmailException("⚠️ 이미 존재하는 이메일입니다.");
+            throw new DuplicateEmailException("이미 존재하는 이메일입니다.");
         }
         int age = LocalDate.now().getYear() - LocalDate.parse(birth).getYear();
         if( age < 20){
-            throw new AgeException("❌ 19세 이하는 가입이 불가능합니다.");
+            throw new AgeException("19세 이하는 가입이 불가능합니다.");
         }
         Member member = new Member(sequence++, name,birth,email,gender);
         memberRepository.save(member);

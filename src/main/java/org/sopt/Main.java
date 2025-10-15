@@ -48,7 +48,7 @@ public class Main {
                             MemberValidator.validateName(name);
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println(e.getMessage());
+                            System.out.println("⚠️ " + e.getMessage());
                         }
                     }
 
@@ -60,13 +60,13 @@ public class Main {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                             LocalDate birthDate = LocalDate.parse(birth, formatter);
                             if(birthDate.isAfter(LocalDate.now())){
-                                System.out.println("⚠️올바른 생년월일을 입력해주세요(yyyy-MM-dd 형식):");
+                                System.out.print("⚠️ 올바른 생년월일을 입력해주세요(yyyy-MM-dd 형식):");
                                 continue;
                             }
                             break;
                         }
                         catch(DateTimeParseException e){
-                            System.out.println("⚠️ 형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:");
+                            System.out.print("⚠️ 형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:");
                         }
                     }
 
@@ -82,7 +82,7 @@ public class Main {
                             }
                             break;
                         } catch (IllegalArgumentException e) {
-                                System.out.println(e.getMessage());
+                                System.out.print("⚠️ " + e.getMessage());
                         }
                     }
 
@@ -108,9 +108,9 @@ public class Main {
                         Long createdId = memberController.createMember(name,birth,email,gender);
                             System.out.println("✅ 회원 등록 완료 (ID: " + createdId + ")");
                         } catch(DuplicateEmailException e){
-                        System.out.println(e.getMessage());
+                        System.out.println("⚠️ " + e.getMessage());
                     } catch(AgeException e){
-                        System.out.println(e.getMessage());
+                        System.out.println("❌ " + e.getMessage());
                     }
 
                     break;
