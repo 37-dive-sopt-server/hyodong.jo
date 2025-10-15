@@ -10,6 +10,16 @@ public class FileMemberRepository implements MemberRepository {
 
     private static final String FILE_PATH = "members.dat";
     private final Map<Long, Member> store = LoadFromFile();
+    private long sequence;
+
+    public FileMemberRepository() {
+        this.sequence=store.keySet().stream().mapToLong(Long::longValue).max().orElse(0) + 1;
+    }
+
+    @Override
+    public Long nextId(){
+        return sequence++;
+    }
 
     private Map<Long, Member> LoadFromFile() {
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH)))
