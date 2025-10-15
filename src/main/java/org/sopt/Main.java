@@ -3,6 +3,10 @@ package org.sopt;
 import org.sopt.controller.MemberController;
 import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
+import org.sopt.exception.custom.AgeException;
+import org.sopt.exception.custom.DuplicateEmailException;
+import org.sopt.exception.custom.MemberNotFoundException;
+import org.sopt.exception.validator.MemberValidator;
 import org.sopt.repository.MemoryMemberRepository;
 import org.sopt.service.MemberServiceImpl;
 
@@ -34,24 +38,27 @@ public class Main {
             System.out.print("메뉴를 선택하세요: ");
 
             String choice = scanner.nextLine();
-            String birth;
-
+            String name;
             switch (choice) {
                 case "1":
-                    System.out.print("등록할 회원 이름을 입력하세요: ");
-                    String name = scanner.nextLine();
-                    if (name.trim().isEmpty()) {
-                        System.out.println("⚠️ 이름을 입력해주세요.");
-                        continue;
+                    while(true) {
+                        try {
+                            System.out.print("등록할 회원 이름을 입력하세요: ");
+                            name = scanner.nextLine();
+                            MemberValidator.validateName(name);
+                            break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
 
+                    String birth;
                     System.out.print("회원님의 생년월일을 입력하세요(yyyy-MM-dd 형식):");
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate birthDate;
                     while(true){
-                        birth = scanner.nextLine();
                         try{
-                            birthDate = LocalDate.parse(birth, formatter);
+                            birth = scanner.nextLine();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate birthDate = LocalDate.parse(birth, formatter);
                             if(birthDate.isAfter(LocalDate.now())){
                                 System.out.println("⚠️올바른 생년월일을 입력해주세요(yyyy-MM-dd 형식):");
                                 continue;
@@ -62,26 +69,23 @@ public class Main {
                             System.out.println("⚠️ 형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:");
                         }
                     }
-                    System.out.print("회원님의 이메일을 입력하세요: ");
-                    String check_email = "^[A-Za-z0-9]+@[A-Za-z0-9.]+$";
+
                     String email;
+                    System.out.print("회원님의 이메일을 입력하세요: ");
                     while(true) {
                         try {
                             email = scanner.nextLine();
-                            if (!email.matches(check_email)) {
-                                System.out.print("⚠️ 형식이 올바르지 않습니다. 올바른 이메일 형식으로 다시 입력해주세요: ");
-                                continue;
-                            }
-                            if (memberController.existsByEmail(email)){
+                            MemberValidator.validateEmailFormat(email);
+                            if (memberController.existsByEmail(email)) {
                                 System.out.print("⚠️ 이미 등록된 이메일입니다. 다른 이메일을 입력해주세요: ");
                                 continue;
                             }
                             break;
-                            }
-                        catch(IllegalStateException e) {
-                            System.out.println(e.getMessage());
+                        } catch (IllegalArgumentException e) {
+                                System.out.println(e.getMessage());
                         }
                     }
+
                     System.out.println("회원님의 성별을 선택 해주세요");
                     System.out.print("1번은 남성, 2번은 여성입니다. 1 또는 2를 입력해주세요(숫자만 입력해주세요): ");
                     Gender gender;
@@ -99,18 +103,18 @@ public class Main {
                             System.out.println("⚠️ 잘못된 입력 값입니다. 1 또는 2를 입력해주세요.");
                         }
                     }
+
                     try{
                         Long createdId = memberController.createMember(name,birth,email,gender);
-                        if (createdId != null) {
                             System.out.println("✅ 회원 등록 완료 (ID: " + createdId + ")");
-                        } else {
-                            System.out.println("❌ 회원 등록 실패");
-                        }
-                    }
-                    catch(IllegalArgumentException e){
+                        } catch(DuplicateEmailException e){
+                        System.out.println(e.getMessage());
+                    } catch(AgeException e){
                         System.out.println(e.getMessage());
                     }
+
                     break;
+
                 case "2":
                     System.out.print("조회할 회원 ID를 입력하세요: ");
                     try {
@@ -126,6 +130,7 @@ public class Main {
                         System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
                     }
                     break;
+
                 case "3":
                     List<Member> allMembers = memberController.getAllMembers();
                     if (allMembers.isEmpty()) {
@@ -140,6 +145,7 @@ public class Main {
                         System.out.println("--------------------------");
                     }
                     break;
+
                 case "4":
                     System.out.print("삭제할 회원 ID를 입력하세요: ");
                     try {
@@ -150,10 +156,11 @@ public class Main {
                     catch (NumberFormatException e) {
                         System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
                     }
-                    catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
+                    catch (MemberNotFoundException e) {
+                        System.out.println("⚠️" + e.getMessage());
                     }
                     break;
+
                 case "5":
                     System.out.println("👋 서비스를 종료합니다. 안녕히 계세요!");
                     scanner.close();
