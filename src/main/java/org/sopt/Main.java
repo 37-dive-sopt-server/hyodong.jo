@@ -63,6 +63,11 @@ public class Main {
                                 System.out.print("⚠️ 올바른 생년월일을 입력해주세요(yyyy-MM-dd 형식):");
                                 continue;
                             }
+                            int age = LocalDate.now().getYear() - birthDate.getYear();
+                            if(age < 20){
+                                System.out.print("❌ 19세 이하는 가입할 수 없습니다. 다시 입력해주세요(yyyy-MM-dd 형식):");
+                                continue;
+                            }
                             break;
                         }
                         catch(DateTimeParseException e){
