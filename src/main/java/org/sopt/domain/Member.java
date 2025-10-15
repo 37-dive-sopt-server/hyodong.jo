@@ -1,6 +1,9 @@
 package org.sopt.domain;
 
-public class Member {
+import java.io.Serializable;
+
+public class Member implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;

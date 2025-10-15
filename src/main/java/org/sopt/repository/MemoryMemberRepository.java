@@ -4,7 +4,7 @@ import org.sopt.domain.Member;
 
 import java.util.*;
 
-public class MemoryMemberRepository {
+public class MemoryMemberRepository implements MemberRepository {
 
 
     private static final Map<Long, Member> store = new HashMap<>();
@@ -27,7 +27,7 @@ public class MemoryMemberRepository {
         return new ArrayList<>(store.values());
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         store.remove(id);
     }
 
