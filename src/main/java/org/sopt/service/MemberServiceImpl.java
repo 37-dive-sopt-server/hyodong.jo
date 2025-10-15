@@ -16,7 +16,11 @@ public class MemberServiceImpl implements  MemberService{
 
     private final MemoryMemberRepository memoryMemberRepository = new MemoryMemberRepository();
     private final FileMemberRepository fileMemberRepository = new FileMemberRepository();
-    private static long sequence = 1L;
+    private long sequence;
+
+    public MemberServiceImpl() {
+        this.sequence=fileMemberRepository.findAll().stream().mapToLong(Member::getId).max().orElse(0) + 1 ;
+    }
 
 
     public Long join(String name, String birth, String email, Gender gender) {
