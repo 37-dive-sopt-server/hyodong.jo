@@ -7,7 +7,10 @@ import org.sopt.exception.custom.AgeException;
 import org.sopt.exception.custom.DuplicateEmailException;
 import org.sopt.exception.custom.MemberNotFoundException;
 import org.sopt.exception.validator.MemberValidator;
+import org.sopt.repository.FileMemberRepository;
+import org.sopt.repository.MemberRepository;
 import org.sopt.repository.MemoryMemberRepository;
+import org.sopt.service.MemberService;
 import org.sopt.service.MemberServiceImpl;
 
 import java.time.LocalDate;
@@ -22,7 +25,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        MemberController memberController = new MemberController();
+        MemberRepository memberRepository = new FileMemberRepository();
+        MemberServiceImpl memberService = new MemberServiceImpl(memberRepository);
+        MemberController memberController = new MemberController(memberService);
 
         Scanner scanner = new Scanner(System.in);
 

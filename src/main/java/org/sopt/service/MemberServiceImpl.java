@@ -17,8 +17,8 @@ public class MemberServiceImpl implements  MemberService{
 
     private final MemberRepository memberRepository;
 
-    public MemberServiceImpl(){
-        this.memberRepository = new FileMemberRepository();
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
 

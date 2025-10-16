@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public class MemberController {
 
-    private final MemberServiceImpl memberServiceImpl = new MemberServiceImpl();
+    private final MemberServiceImpl memberServiceImpl;
+
+    public MemberController(MemberServiceImpl memberServiceImpl) {
+        this.memberServiceImpl = memberServiceImpl;
+    }
 
     public Long createMember(String name, String birth, String email, Gender gender) {
 
