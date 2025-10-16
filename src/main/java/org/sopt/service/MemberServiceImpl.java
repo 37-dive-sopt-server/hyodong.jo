@@ -5,9 +5,7 @@ import org.sopt.domain.Member;
 import org.sopt.exception.custom.AgeException;
 import org.sopt.exception.custom.DuplicateEmailException;
 import org.sopt.exception.custom.MemberNotFoundException;
-import org.sopt.repository.FileMemberRepository;
 import org.sopt.repository.MemberRepository;
-import org.sopt.repository.MemoryMemberRepository;
 
 import java.time.LocalDate;
 import java.util.List;
