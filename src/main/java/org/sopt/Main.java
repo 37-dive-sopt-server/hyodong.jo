@@ -9,6 +9,7 @@ import org.sopt.exception.custom.MemberNotFoundException;
 import org.sopt.exception.validator.MemberValidator;
 import org.sopt.repository.FileMemberRepository;
 import org.sopt.repository.MemberRepository;
+import org.sopt.service.MemberService;
 import org.sopt.service.MemberServiceImpl;
 
 import java.time.LocalDate;
@@ -24,8 +25,8 @@ public class Main {
     public static void main(String[] args) {
 
         MemberRepository memberRepository = new FileMemberRepository();
-        MemberServiceImpl memberServiceImpl = new MemberServiceImpl(memberRepository);
-        MemberController memberController = new MemberController(memberServiceImpl);
+        MemberService memberService = new MemberServiceImpl(memberRepository);
+        MemberController memberController = new MemberController(memberService);
 
         Scanner scanner = new Scanner(System.in);
 

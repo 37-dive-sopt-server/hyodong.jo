@@ -2,6 +2,7 @@ package org.sopt.controller;
 
 import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
+import org.sopt.service.MemberService;
 import org.sopt.service.MemberServiceImpl;
 
 import java.util.List;
@@ -9,27 +10,27 @@ import java.util.Optional;
 
 public class MemberController {
 
-    private final MemberServiceImpl memberServiceImpl;
+    private final MemberService memberService;
 
-    public MemberController(MemberServiceImpl memberServiceImpl) {
-        this.memberServiceImpl = memberServiceImpl;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     public Long createMember(String name, String birth, String email, Gender gender) {
 
-        return memberServiceImpl.join(name,birth,email,gender);
+        return memberService.join(name,birth,email,gender);
     }
 
     public Optional<Member> findMemberById(Long id) {
-        return memberServiceImpl.findOne(id);
+        return memberService.findOne(id);
     }
 
     public List<Member> getAllMembers() {
-        return memberServiceImpl.findAllMembers();
+        return memberService.findAllMembers();
     }
 
-    public void deleteMemberById(Long id) {memberServiceImpl.deleteMember(id);}
+    public void deleteMemberById(Long id) {memberService.deleteMember(id);}
 
     public boolean existsByEmail(String email) {
-        return memberServiceImpl.existsByEmail(email);}
+        return memberService.existsByEmail(email);}
     }
