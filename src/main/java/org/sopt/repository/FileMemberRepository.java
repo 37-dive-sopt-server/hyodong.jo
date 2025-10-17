@@ -13,40 +13,23 @@ public class FileMemberRepository implements MemberRepository {
     private long sequence;
 
     public FileMemberRepository() {
-        this.sequence=store.keySet().stream().mapToLong(Long::longValue).max().orElse(0) + 1;
+        this.sequence = store.keySet().stream().mapToLong(Long::longValue).max().orElse(0) + 1;
     }
 
     @Override
-    public Long nextId(){
+    public Long nextId() {
         return sequence++;
-    }
-
-    private Map<Long, Member> LoadFromFile() {
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH)))
-        {
-            return (Map<Long,Member>) ois.readObject();
-        } catch (Exception e){
-            return new HashMap<>();
-        }
-    }
-    private void saveToFile(){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH)))
-        {
-            oos.writeObject(store);
-        } catch (IOException e){
-            throw new RuntimeException("저장 중 오류 발생");
-        }
     }
 
     @Override
     public Member save(Member member) {
-        store.put(member.getId(),member);
+        store.put(member.getId(), member);
         saveToFile();
         return member;
     }
 
     @Override
-    public Optional<Member> findById(Long id){
+    public Optional<Member> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 
@@ -60,6 +43,7 @@ public class FileMemberRepository implements MemberRepository {
         store.remove(id);
         saveToFile();
     }
+
     @Override
     public boolean existById(Long id) {
         return store.containsKey(id);
@@ -68,6 +52,22 @@ public class FileMemberRepository implements MemberRepository {
     @Override
     public boolean existsByEmail(String email) {
         return store.values().stream().anyMatch(member -> member.getEmail().equals(email));
+    }
+
+    private Map<Long, Member> LoadFromFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+            return (Map<Long, Member>) ois.readObject();
+        } catch (Exception e) {
+            return new HashMap<>();
+        }
+    }
+
+    private void saveToFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+            oos.writeObject(store);
+        } catch (IOException e) {
+            throw new RuntimeException("저장 중 오류 발생");
+        }
     }
 
 
