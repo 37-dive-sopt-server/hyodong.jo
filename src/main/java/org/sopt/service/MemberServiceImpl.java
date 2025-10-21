@@ -6,18 +6,19 @@ import org.sopt.exception.custom.AgeException;
 import org.sopt.exception.custom.DuplicateEmailException;
 import org.sopt.exception.custom.MemberNotFoundException;
 import org.sopt.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MemberServiceImpl implements  MemberService{
 
-    private final MemberRepository memberRepository;
+    @Autowired // 샐성자 주입 방식으로 바꾸기
+    private MemberRepository memberRepository;
 
-    public MemberServiceImpl(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
 
     public Long join(String name, String birth, String email, Gender gender) {

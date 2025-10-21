@@ -41,4 +41,6 @@ public class Member implements Serializable {
     public Gender getGender() {
         return gender;
     }
+
 }
+
