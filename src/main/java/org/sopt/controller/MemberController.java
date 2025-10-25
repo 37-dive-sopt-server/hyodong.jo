@@ -3,12 +3,7 @@ package org.sopt.controller;
 import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
 import org.sopt.service.MemberService;
-import org.sopt.service.MemberServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +23,8 @@ public class MemberController {
         return memberService.join(name,birth,email,gender);
     }
 
-    @GetMapping("/users")
-    public Optional<Member> findMemberById(Long id) {
+    @GetMapping("/users/{id}")
+    public Optional<Member> findMemberById(@PathVariable Long id) {
         return memberService.findOne(id);
     }
 
@@ -38,9 +33,9 @@ public class MemberController {
         return memberService.findAllMembers();
     }
 
-    @DeleteMapping("/users")
-    public void deleteMemberById(Long id) {memberService.deleteMember(id);}
-
-    public boolean existsByEmail(String email) {
-        return memberService.existsByEmail(email);}
+    @DeleteMapping("/users/{id}")
+    public void deleteMemberById(@PathVariable Long id) {
+        memberService.deleteMember(id);
     }
+
+}
