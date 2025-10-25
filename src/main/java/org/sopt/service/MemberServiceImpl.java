@@ -36,14 +36,6 @@ public class MemberServiceImpl implements  MemberService{
         return mapToMemberResponse(member);
     }
 
-    private MemberResponse mapToMemberResponse(Member member) {
-        return new MemberResponse(member.getId(),
-                member.getName(),
-                member.getBirth(),
-                member.getEmail(),
-                member.getGender());
-    }
-
     public MemberResponse findOne(Long memberId) {
         Member member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
@@ -63,5 +55,13 @@ public class MemberServiceImpl implements  MemberService{
 
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    private MemberResponse mapToMemberResponse(Member member) {
+        return new MemberResponse(member.getId(),
+                member.getName(),
+                member.getBirth(),
+                member.getEmail(),
+                member.getGender());
     }
 }
