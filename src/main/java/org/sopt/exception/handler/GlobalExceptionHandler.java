@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ApiResponse<Void>> handleInvaildInputException(InvalidInputException e) {
+    public ResponseEntity<ApiResponse<Void>> handleInvalidInputException(InvalidInputException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.fail(e.getMessage()));
     }
 
