@@ -16,8 +16,11 @@ import java.util.Optional;
 @RestController
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     @PostMapping("/users")
     public Long createMember(String name, String birth, String email, Gender gender) {

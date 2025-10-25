@@ -16,9 +16,11 @@ import java.util.Optional;
 @Service
 public class MemberServiceImpl implements  MemberService{
 
-    @Autowired // 샐성자 주입 방식으로 바꾸기
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
 
     public Long join(String name, String birth, String email, Gender gender) {
