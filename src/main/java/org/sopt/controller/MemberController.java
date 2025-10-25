@@ -1,12 +1,11 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Gender;
-import org.sopt.domain.Member;
+import org.sopt.dto.member.request.MemberCreateRequest;
+import org.sopt.dto.member.response.MemberResponse;
 import org.sopt.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class MemberController {
@@ -18,18 +17,18 @@ public class MemberController {
     }
 
     @PostMapping("/users")
-    public Long createMember(String name, String birth, String email, Gender gender) {
+    public MemberResponse createMember(@RequestBody MemberCreateRequest request) {
 
-        return memberService.join(name,birth,email,gender);
+        return memberService.join(request);
     }
 
     @GetMapping("/users/{id}")
-    public Optional<Member> findMemberById(@PathVariable Long id) {
+    public MemberResponse findMemberById(@PathVariable Long id) {
         return memberService.findOne(id);
     }
 
     @GetMapping("/users/all")
-    public List<Member> getAllMembers() {
+    public List<MemberResponse> getAllMembers() {
         return memberService.findAllMembers();
     }
 
