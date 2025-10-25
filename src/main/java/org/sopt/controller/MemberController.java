@@ -1,8 +1,11 @@
 package org.sopt.controller;
 
+import org.sopt.common.ApiResponse;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
 import org.sopt.service.MemberService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,24 +20,27 @@ public class MemberController {
     }
 
     @PostMapping("/users")
-    public MemberResponse createMember(@RequestBody MemberCreateRequest request) {
-
-        return memberService.join(request);
+    public ResponseEntity<ApiResponse<MemberResponse>> createMember(@RequestBody MemberCreateRequest request) {
+    MemberResponse response = memberService.join(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @GetMapping("/users/{id}")
-    public MemberResponse findMemberById(@PathVariable Long id) {
-        return memberService.findOne(id);
+    public ResponseEntity<ApiResponse<MemberResponse>> findMemberById(@PathVariable Long id) {
+        MemberResponse response = memberService.findOne(id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
     @GetMapping("/users/all")
-    public List<MemberResponse> getAllMembers() {
-        return memberService.findAllMembers();
+    public ResponseEntity<ApiResponse<List<MemberResponse>>> getAllMembers() {
+        List<MemberResponse> responses =  memberService.findAllMembers();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(responses));
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteMemberById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteMemberById(@PathVariable Long id) {
         memberService.deleteMember(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
 
 }
