@@ -24,6 +24,7 @@ public class MemberController {
     public ResponseEntity<ErrorResponse<MemberResponse>> createMember(@RequestBody MemberCreateRequest request) {
         MemberValidator.validateName(request.getName());
         MemberValidator.validateEmailFormat(request.getEmail());
+        MemberValidator.validateBirthFormat(request.getBirth());
         
         MemberResponse response = memberService.join(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ErrorResponse.success(response));
