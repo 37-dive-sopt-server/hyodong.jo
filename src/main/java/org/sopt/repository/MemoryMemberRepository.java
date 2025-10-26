@@ -1,12 +1,14 @@
 package org.sopt.repository;
 
 import org.sopt.domain.Member;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
 @Repository
+@Primary
 public class MemoryMemberRepository implements MemberRepository {
 
     private static final Map<Long, Member> store = new HashMap<>();

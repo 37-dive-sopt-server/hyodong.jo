@@ -17,4 +17,23 @@ public class MemberResponse {
         this.gender = gender;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
 }

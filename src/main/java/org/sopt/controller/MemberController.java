@@ -3,6 +3,7 @@ package org.sopt.controller;
 import org.sopt.common.ApiResponse;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
+import org.sopt.exception.validator.MemberValidator;
 import org.sopt.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,10 @@ public class MemberController {
 
     @PostMapping("/users")
     public ResponseEntity<ApiResponse<MemberResponse>> createMember(@RequestBody MemberCreateRequest request) {
-    MemberResponse response = memberService.join(request);
+        MemberValidator.validateName(request.getName());
+        MemberValidator.validateEmailFormat(request.getEmail());
+        
+        MemberResponse response = memberService.join(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
