@@ -3,7 +3,6 @@ package org.sopt.repository;
 import org.sopt.domain.Member;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 
