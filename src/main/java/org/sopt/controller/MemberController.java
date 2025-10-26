@@ -1,6 +1,6 @@
 package org.sopt.controller;
 
-import org.sopt.common.ErrorResponse;
+import org.sopt.exception.common.ErrorResponse;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
 import org.sopt.exception.validator.MemberValidator;

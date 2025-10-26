@@ -1,6 +1,6 @@
 package org.sopt.exception.handler;
 
-import org.sopt.common.ErrorResponse;
+import org.sopt.exception.common.ErrorResponse;
 import org.sopt.exception.custom.AgeException;
 import org.sopt.exception.custom.DuplicateEmailException;
 import org.sopt.exception.custom.InvalidInputException;

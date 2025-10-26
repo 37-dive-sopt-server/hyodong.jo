@@ -1,4 +1,4 @@
-package org.sopt.common;
+package org.sopt.exception.common;
 
 public class ErrorResponse<T> {
 
