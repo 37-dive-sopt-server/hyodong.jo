@@ -1,4 +1,4 @@
-package org.sopt.exception.custom;
+package org.sopt.global.exception.custom;
 
 public class InvalidInputException extends RuntimeException {
     public InvalidInputException(String message) {

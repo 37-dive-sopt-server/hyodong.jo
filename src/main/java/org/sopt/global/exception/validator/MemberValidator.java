@@ -1,6 +1,6 @@
-package org.sopt.exception.validator;
+package org.sopt.global.exception.validator;
 
-import org.sopt.exception.custom.InvalidInputException;
+import org.sopt.global.exception.custom.InvalidInputException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

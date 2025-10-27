@@ -3,9 +3,9 @@ package org.sopt.service;
 import org.sopt.domain.Member;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
-import org.sopt.exception.custom.AgeException;
-import org.sopt.exception.custom.DuplicateEmailException;
-import org.sopt.exception.custom.MemberNotFoundException;
+import org.sopt.global.exception.custom.AgeException;
+import org.sopt.global.exception.custom.DuplicateEmailException;
+import org.sopt.global.exception.custom.MemberNotFoundException;
 import org.sopt.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
