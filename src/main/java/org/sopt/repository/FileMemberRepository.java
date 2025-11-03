@@ -2,10 +2,12 @@ package org.sopt.repository;
 
 
 import org.sopt.domain.Member;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.*;
 
+@Repository
 public class FileMemberRepository implements MemberRepository {
 
     private static final String FILE_PATH = "members.dat";

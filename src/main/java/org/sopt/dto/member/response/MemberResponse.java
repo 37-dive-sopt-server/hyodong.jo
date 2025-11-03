@@ -1,26 +1,21 @@
-package org.sopt.domain;
+package org.sopt.dto.member.response;
 
-import java.io.Serializable;
+import org.sopt.domain.Gender;
 
-public class Member implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class MemberResponse {
+    private final Long id;
+    private final String name;
+    private final String birth;
+    private final String email;
+    private final Gender gender;
 
-    private Long id;
-    private String name;
-    private String birth;
-    private String email;
-    private Gender gender;
-
-
-
-    public Member(Long id, String name, String birth, String email, Gender gender) {
+    public MemberResponse(Long id, String name, String birth, String email, Gender gender) {
         this.id = id;
         this.name = name;
         this.birth = birth;
         this.email = email;
         this.gender = gender;
     }
-
 
     public Long getId() {
         return id;
@@ -41,6 +36,4 @@ public class Member implements Serializable {
     public Gender getGender() {
         return gender;
     }
-
 }
-

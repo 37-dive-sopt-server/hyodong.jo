@@ -1,13 +1,17 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Gender;
-import org.sopt.domain.Member;
+import org.sopt.global.response.ApiResponse;
+import org.sopt.dto.member.request.MemberCreateRequest;
+import org.sopt.dto.member.response.MemberResponse;
+import org.sopt.global.exception.validator.MemberValidator;
 import org.sopt.service.MemberService;
-import org.sopt.service.MemberServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@RestController
 public class MemberController {
 
     private final MemberService memberService;
@@ -16,21 +20,32 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    public Long createMember(String name, String birth, String email, Gender gender) {
-
-        return memberService.join(name,birth,email,gender);
+    @PostMapping("/users")
+    public ResponseEntity<ApiResponse<MemberResponse>> createMember(@RequestBody MemberCreateRequest request) {
+        MemberValidator.validateName(request.getName());
+        MemberValidator.validateEmailFormat(request.getEmail());
+        MemberValidator.validateBirthFormat(request.getBirth());
+        
+        MemberResponse response = memberService.join(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
-    public Optional<Member> findMemberById(Long id) {
-        return memberService.findOne(id);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<MemberResponse>> findMemberById(@PathVariable Long id) {
+        MemberResponse response = memberService.findOne(id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
-    public List<Member> getAllMembers() {
-        return memberService.findAllMembers();
+    @GetMapping("/users/all")
+    public ResponseEntity<ApiResponse<List<MemberResponse>>> getAllMembers() {
+        List<MemberResponse> responses =  memberService.findAllMembers();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(responses));
     }
 
-    public void deleteMemberById(Long id) {memberService.deleteMember(id);}
-
-    public boolean existsByEmail(String email) {
-        return memberService.existsByEmail(email);}
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteMemberById(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
+
+}

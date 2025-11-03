@@ -1,16 +1,17 @@
 package org.sopt.service;
 
-import org.sopt.domain.Gender;
 import org.sopt.domain.Member;
-import org.sopt.exception.custom.AgeException;
-import org.sopt.exception.custom.DuplicateEmailException;
-import org.sopt.exception.custom.MemberNotFoundException;
+import org.sopt.dto.member.request.MemberCreateRequest;
+import org.sopt.dto.member.response.MemberResponse;
+import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.domain.member.MemberException;
 import org.sopt.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
+@Service
 public class MemberServiceImpl implements  MemberService{
 
     private final MemberRepository memberRepository;
@@ -20,36 +21,46 @@ public class MemberServiceImpl implements  MemberService{
     }
 
 
-    public Long join(String name, String birth, String email, Gender gender) {
-        if(memberRepository.existsByEmail(email)) {
-            throw new DuplicateEmailException("이미 존재하는 이메일입니다.");
+    public MemberResponse join(MemberCreateRequest request) {
+        if(memberRepository.existsByEmail(request.getEmail())) {
+            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
         }
-        int age = LocalDate.now().getYear() - LocalDate.parse(birth).getYear();
+        int age = LocalDate.now().getYear() - LocalDate.parse(request.getBirth()).getYear();
         if( age < 20){
-            throw new AgeException("19세 이하는 가입이 불가능합니다.");
+            throw new MemberException(ErrorCode.AGE_LOW);
         }
         Long id = memberRepository.nextId();
-        Member member = new Member(id, name,birth,email,gender);
+        Member member = new Member(id,request.getName(),request.getBirth(),request.getEmail(),request.getGender());
         memberRepository.save(member);
-        return member.getId();
+        return mapToMemberResponse(member);
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public MemberResponse findOne(Long memberId) {
+        Member member =  memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+        return mapToMemberResponse(member);
     }
 
-    public List<Member> findAllMembers() {
-        return memberRepository.findAll();
+    public List<MemberResponse> findAllMembers() {
+        return memberRepository.findAll().stream().map(this::mapToMemberResponse).toList();
     }
 
     public void deleteMember(Long memberId) {
         if(!memberRepository.existById(memberId)) {
-            throw new MemberNotFoundException(memberId);
+            throw new MemberException(ErrorCode.MEMBER_NOT_FOUND);
         }
         memberRepository.deleteById(memberId);
     }
 
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
+    }
+
+    private MemberResponse mapToMemberResponse(Member member) {
+        return new MemberResponse(member.getId(),
+                member.getName(),
+                member.getBirth(),
+                member.getEmail(),
+                member.getGender());
     }
 }
