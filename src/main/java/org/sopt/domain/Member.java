@@ -2,9 +2,6 @@ package org.sopt.domain;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Member{
 

@@ -1,9 +1,9 @@
 package org.sopt.controller;
 
-import org.sopt.global.response.ApiResponse;
+import jakarta.validation.Valid;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
-import org.sopt.global.exception.validator.MemberValidator;
+import org.sopt.global.response.ApiResponse;
 import org.sopt.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,7 @@ public class MemberController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<ApiResponse<MemberResponse>> createMember(@RequestBody MemberCreateRequest request) {
-        MemberValidator.validateName(request.getName());
-        MemberValidator.validateEmailFormat(request.getEmail());
-        MemberValidator.validateBirthFormat(request.getBirth());
+    public ResponseEntity<ApiResponse<MemberResponse>> createMember(@Valid @RequestBody MemberCreateRequest request) {
         
         MemberResponse response = memberService.join(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
