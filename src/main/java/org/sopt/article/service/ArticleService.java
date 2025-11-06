@@ -1,10 +1,42 @@
 package org.sopt.article.service;
 
+import lombok.RequiredArgsConstructor;
+import org.sopt.article.dto.request.ArticleCreateRequest;
+import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.entity.Article;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.sopt.article.repository.ArticleRepository;
+import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.domain.member.MemberException;
+import org.sopt.member.entity.Member;
+import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class ArticleService  {
+    private final ArticleRepository articleRepository;
+    private final MemberRepository memberRepository;
+
+    @Transactional
+    public ArticleResponse createArticle(ArticleCreateRequest request) {
+
+        Member member = memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Article article = Article.builder()
+                .title(request.title())
+                .content(request.content())
+                .tag(request.tag())
+                .date(LocalDate.now())
+                .member(member)
+                .build();
+
+        Article savedArticle = articleRepository.save(article);
+
+        return ArticleResponse.from(savedArticle);
+    }
 
 }

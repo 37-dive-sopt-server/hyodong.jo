@@ -1,7 +1,28 @@
 package org.sopt.article.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.sopt.article.dto.request.ArticleCreateRequest;
+import org.sopt.article.dto.response.ArticleResponse;
+import org.sopt.article.service.ArticleService;
+import org.sopt.global.response.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/articles")
 public class ArticleController {
+
+    private final ArticleService articleService;
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<ArticleResponse>> createArticle(
+            @Valid @RequestBody ArticleCreateRequest request
+    ) {
+        ArticleResponse response = articleService.createArticle(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
 }

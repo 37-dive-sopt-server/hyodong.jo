@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.article.entity.Article;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -15,6 +19,7 @@ public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
     private String name;
     private String birth;
@@ -22,6 +27,9 @@ public class Member{
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @OneToMany(mappedBy = "member")
+    private List<Article> articles = new ArrayList<>();
 
 }
 
