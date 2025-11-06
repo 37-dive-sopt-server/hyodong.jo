@@ -22,14 +22,14 @@ public class MemberServiceImpl implements  MemberService{
 
 
     public MemberResponse join(MemberCreateRequest request) {
-        if(memberRepository.existsByEmail(request.getEmail())) {
+        if(memberRepository.existsByEmail(request.email())) {
             throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
         }
-        int age = LocalDate.now().getYear() - LocalDate.parse(request.getBirth()).getYear();
+        int age = LocalDate.now().getYear() - LocalDate.parse(request.birth()).getYear();
         if( age < 20){
             throw new MemberException(ErrorCode.AGE_LOW);
         }
-        Member member = new Member(request.getName(),request.getBirth(),request.getEmail(),request.getGender());
+        Member member = new Member(request.name(),request.birth(),request.email(),request.gender());
         memberRepository.save(member);
         return mapToMemberResponse(member);
     }
