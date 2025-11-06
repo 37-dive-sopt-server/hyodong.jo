@@ -3,6 +3,7 @@ package org.sopt.article.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.article.dto.request.ArticleCreateRequest;
+import org.sopt.article.dto.response.ArticleListResponse;
 import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.service.ArticleService;
 import org.sopt.global.response.ApiResponse;
@@ -29,6 +30,13 @@ public class ArticleController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ArticleResponse>> findArticle(@PathVariable Long id) {
         ArticleResponse response = articleService.findArticle(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<ArticleListResponse>> findAllArticles() {
+        ArticleListResponse response = articleService.findAllArticles();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(response));
     }

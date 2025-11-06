@@ -2,6 +2,7 @@ package org.sopt.article.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.article.dto.request.ArticleCreateRequest;
+import org.sopt.article.dto.response.ArticleListResponse;
 import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.entity.Article;
 import org.sopt.article.repository.ArticleRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,15 @@ public class ArticleService  {
                 .orElseThrow(() -> new ArticleException(ErrorCode.ARTICLE_NOT_FOUND));
 
         return ArticleResponse.from(article);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleListResponse findAllArticles() {
+        List<ArticleResponse> articles = articleRepository.findAll().stream()
+                .map(ArticleResponse::from)
+                .toList();
+
+        return ArticleListResponse.from(articles);
     }
 
 }
