@@ -2,42 +2,42 @@ package org.sopt.member.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.sopt.member.dto.request.MemberCreateRequest;
-import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.global.response.ApiResponse;
+import org.sopt.member.dto.request.MemberCreateRequest;
+import org.sopt.member.dto.response.MemberListResponse;
+import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<ApiResponse<MemberResponse>> createMember(@Valid @RequestBody MemberCreateRequest request) {
         
         MemberResponse response = memberService.join(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<MemberResponse>> findMemberById(@PathVariable Long id) {
         MemberResponse response = memberService.findOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
-    @GetMapping("/users/all")
-    public ResponseEntity<ApiResponse<List<MemberResponse>>> getAllMembers() {
-        List<MemberResponse> responses =  memberService.findAllMembers();
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(responses));
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<MemberListResponse>> getAllMembers() {
+        MemberListResponse response =  memberService.findAllMembers();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteMemberById(@PathVariable Long id) {
         memberService.deleteMember(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));

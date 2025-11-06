@@ -1,6 +1,7 @@
 package org.sopt.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.member.dto.response.MemberListResponse;
 import org.sopt.member.entity.Member;
 import org.sopt.member.dto.request.MemberCreateRequest;
 import org.sopt.member.dto.response.MemberResponse;
@@ -46,8 +47,8 @@ public class MemberService{
     }
 
     @Transactional(readOnly = true)
-    public List<MemberResponse> findAllMembers() {
-        return memberRepository.findAll().stream().map(MemberResponse::from).toList();
+    public MemberListResponse findAllMembers() {
+        return memberRepository.findAll().stream().map(MemberListResponse::from).toList();
     }
 
     @Transactional(readOnly = true)
