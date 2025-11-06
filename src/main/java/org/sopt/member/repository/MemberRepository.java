@@ -1,6 +1,6 @@
-package org.sopt.Member.repository;
+package org.sopt.member.repository;
 
-import org.sopt.Member.entity.Member;
+import org.sopt.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {

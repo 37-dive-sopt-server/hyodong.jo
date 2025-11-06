@@ -1,11 +1,11 @@
-package org.sopt.Member.service;
+package org.sopt.member.service;
 
-import org.sopt.Member.entity.Member;
-import org.sopt.Member.dto.request.MemberCreateRequest;
-import org.sopt.Member.dto.response.MemberResponse;
+import org.sopt.member.entity.Member;
+import org.sopt.member.dto.request.MemberCreateRequest;
+import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.global.exception.ErrorCode;
 import org.sopt.global.exception.domain.member.MemberException;
-import org.sopt.Member.repository.MemberRepository;
+import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,9 +1,9 @@
-package org.sopt.Article.entity;
+package org.sopt.article.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sopt.Member.entity.Member;
+import org.sopt.member.entity.Member;
 
 @Entity
 @Getter

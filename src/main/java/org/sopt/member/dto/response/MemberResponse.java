@@ -1,7 +1,7 @@
-package org.sopt.Member.dto.response;
+package org.sopt.member.dto.response;
 
-import org.sopt.Member.entity.Gender;
-import org.sopt.Member.entity.Member;
+import org.sopt.member.entity.Gender;
+import org.sopt.member.entity.Member;
 
 public record MemberResponse(Long id,String name,String birth,String email,Gender gender) {
 

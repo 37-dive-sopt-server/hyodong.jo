@@ -1,9 +1,9 @@
-package org.sopt.Member.dto.request;
+package org.sopt.member.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.sopt.Member.entity.Gender;
+import org.sopt.member.entity.Gender;
 
 public record MemberCreateRequest(@NotBlank(message = "이름은 필수 입니다.") String name,
                                   @NotBlank(message = "생년월일은 필수 입니다") String birth,

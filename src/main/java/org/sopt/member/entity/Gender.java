@@ -1,4 +1,4 @@
-package org.sopt.Member.entity;
+package org.sopt.member.entity;
 
 public enum Gender {
     MALE("남성"),
