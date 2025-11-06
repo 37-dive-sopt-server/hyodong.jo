@@ -29,8 +29,7 @@ public class MemberServiceImpl implements  MemberService{
         if( age < 20){
             throw new MemberException(ErrorCode.AGE_LOW);
         }
-        Long id = memberRepository.nextId();
-        Member member = new Member(id,request.getName(),request.getBirth(),request.getEmail(),request.getGender());
+        Member member = new Member(request.getName(),request.getBirth(),request.getEmail(),request.getGender());
         memberRepository.save(member);
         return mapToMemberResponse(member);
     }
@@ -46,9 +45,8 @@ public class MemberServiceImpl implements  MemberService{
     }
 
     public void deleteMember(Long memberId) {
-        if(!memberRepository.existById(memberId)) {
-            throw new MemberException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
         memberRepository.deleteById(memberId);
     }
 
