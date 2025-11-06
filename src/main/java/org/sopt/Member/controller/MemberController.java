@@ -1,10 +1,10 @@
-package org.sopt.controller;
+package org.sopt.Member.controller;
 
 import jakarta.validation.Valid;
-import org.sopt.dto.member.request.MemberCreateRequest;
-import org.sopt.dto.member.response.MemberResponse;
+import org.sopt.Member.dto.request.MemberCreateRequest;
+import org.sopt.Member.dto.response.MemberResponse;
 import org.sopt.global.response.ApiResponse;
-import org.sopt.service.MemberService;
+import org.sopt.Member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package org.sopt.domain;
+package org.sopt.Member.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
