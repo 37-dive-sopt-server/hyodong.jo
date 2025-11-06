@@ -1,8 +1,16 @@
 package org.sopt.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class Member{
 
     @Id
@@ -14,36 +22,6 @@ public class Member{
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-
-    protected Member(){}
-
-    public Member(String name, String birth, String email, Gender gender) {
-        this.name = name;
-        this.birth = birth;
-        this.email = email;
-        this.gender = gender;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getBirth() {
-        return birth;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
 
 }
 

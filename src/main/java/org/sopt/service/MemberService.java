@@ -1,19 +1,65 @@
 package org.sopt.service;
 
+import org.sopt.domain.Member;
 import org.sopt.dto.member.request.MemberCreateRequest;
 import org.sopt.dto.member.response.MemberResponse;
+import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.domain.member.MemberException;
+import org.sopt.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public interface MemberService {
-    MemberResponse join(MemberCreateRequest request);
+@Service
+public class MemberService{
 
-    MemberResponse findOne(Long memberId);
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
 
-    List<MemberResponse> findAllMembers();
+    public MemberResponse join(MemberCreateRequest request) {
+        if(memberRepository.existsByEmail(request.email())) {
+            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        int age = LocalDate.now().getYear() - LocalDate.parse(request.birth()).getYear();
+        if( age < 20){
+            throw new MemberException(ErrorCode.AGE_LOW);
+        }
+        Member member = Member.builder()
+                .name(request.name())
+                .birth(request.birth())
+                .email(request.email())
+                .gender(request.gender())
+                .build();
+        memberRepository.save(member);
+        return mapToMemberResponse(member);
+    }
 
-    void deleteMember(Long memberId);
+    public MemberResponse findOne(Long memberId) {
+        Member member =  memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+        return mapToMemberResponse(member);
+    }
 
-    boolean existsByEmail(String email);
+    public List<MemberResponse> findAllMembers() {
+        return memberRepository.findAll().stream().map(this::mapToMemberResponse).toList();
+    }
+
+    public void deleteMember(Long memberId) {
+        memberRepository.findById(memberId)
+                        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+        memberRepository.deleteById(memberId);
+    }
+
+    private MemberResponse mapToMemberResponse(Member member) {
+        return new MemberResponse(member.getId(),
+                member.getName(),
+                member.getBirth(),
+                member.getEmail(),
+                member.getGender());
+    }
 }
