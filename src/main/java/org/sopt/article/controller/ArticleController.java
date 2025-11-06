@@ -25,4 +25,11 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ArticleResponse>> findArticle(@PathVariable Long id) {
+        ArticleResponse response = articleService.findArticle(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
 }

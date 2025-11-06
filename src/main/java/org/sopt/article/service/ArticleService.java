@@ -6,6 +6,7 @@ import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.entity.Article;
 import org.sopt.article.repository.ArticleRepository;
 import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.domain.article.ArticleException;
 import org.sopt.global.exception.domain.member.MemberException;
 import org.sopt.member.entity.Member;
 import org.sopt.member.repository.MemberRepository;
@@ -37,6 +38,14 @@ public class ArticleService  {
         Article savedArticle = articleRepository.save(article);
 
         return ArticleResponse.from(savedArticle);
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleResponse findArticle(Long articleId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ArticleException(ErrorCode.ARTICLE_NOT_FOUND));
+
+        return ArticleResponse.from(article);
     }
 
 }
