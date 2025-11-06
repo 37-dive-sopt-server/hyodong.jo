@@ -1,5 +1,6 @@
 package org.sopt.member.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sopt.member.entity.Member;
 import org.sopt.member.dto.request.MemberCreateRequest;
 import org.sopt.member.dto.response.MemberResponse;
@@ -7,20 +8,18 @@ import org.sopt.global.exception.ErrorCode;
 import org.sopt.global.exception.domain.member.MemberException;
 import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService{
 
     private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
-
+    @Transactional
     public MemberResponse join(MemberCreateRequest request) {
         if(memberRepository.existsByEmail(request.email())) {
             throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
@@ -39,16 +38,19 @@ public class MemberService{
         return MemberResponse.from(member);
     }
 
+    @Transactional(readOnly = true)
     public MemberResponse findOne(Long memberId) {
         Member member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
         return MemberResponse.from(member);
     }
 
+    @Transactional(readOnly = true)
     public List<MemberResponse> findAllMembers() {
         return memberRepository.findAll().stream().map(MemberResponse::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public void deleteMember(Long memberId) {
         memberRepository.findById(memberId)
                         .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
