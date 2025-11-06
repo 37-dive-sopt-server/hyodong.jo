@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class MemberService{
 
@@ -36,17 +38,17 @@ public class MemberService{
                 .gender(request.gender())
                 .build();
         memberRepository.save(member);
-        return mapToMemberResponse(member);
+        return MemberResponse.from(member);
     }
 
     public MemberResponse findOne(Long memberId) {
         Member member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
-        return mapToMemberResponse(member);
+        return MemberResponse.from(member);
     }
 
     public List<MemberResponse> findAllMembers() {
-        return memberRepository.findAll().stream().map(this::mapToMemberResponse).toList();
+        return memberRepository.findAll().stream().map(MemberResponse::from).toList();
     }
 
     public void deleteMember(Long memberId) {
@@ -55,11 +57,4 @@ public class MemberService{
         memberRepository.deleteById(memberId);
     }
 
-    private MemberResponse mapToMemberResponse(Member member) {
-        return new MemberResponse(member.getId(),
-                member.getName(),
-                member.getBirth(),
-                member.getEmail(),
-                member.getGender());
-    }
 }
