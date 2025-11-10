@@ -6,6 +6,7 @@ import org.sopt.article.dto.response.ArticleListResponse;
 import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.entity.Article;
 import org.sopt.article.repository.ArticleRepository;
+import org.sopt.global.exception.BusinessException;
 import org.sopt.global.exception.ErrorCode;
 import org.sopt.global.exception.domain.article.ArticleException;
 import org.sopt.global.exception.domain.member.MemberException;
@@ -27,7 +28,7 @@ public class ArticleService  {
     public ArticleResponse createArticle(ArticleCreateRequest request) {
 
         if(articleRepository.existsByTitle(request.title())){
-            throw new ArticleException(ErrorCode.DUPLICATE_TITLE);
+            throw new BusinessException(ErrorCode.DUPLICATE_TITLE);
         }
 
         Member member = memberRepository.findById(request.memberId())

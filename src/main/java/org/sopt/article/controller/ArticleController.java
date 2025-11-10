@@ -34,10 +34,12 @@ public class ArticleController {
                 .body(ApiResponse.success(response));
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<ApiResponse<ArticleListResponse>> findAllArticles() {
         ArticleListResponse response = articleService.findAllArticles();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(response));
     }
+
+    @GetMapping
 }
