@@ -8,7 +8,8 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.CONFLICT,"M002","이미 존재하는 이메일입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"M003","해당 ID의 회원을 찾을 수 없습니다."),
     // article
-    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND,"A001","해당 ID의 아티클을 찾을 수 없습니다.");
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND,"A001","해당 ID의 아티클을 찾을 수 없습니다."),
+    DUPLICATE_TILE(HttpStatus.CONFLICT,"A002","이미 존재하는 제목입니다.");
 
     private final HttpStatus status;
     private final String code;

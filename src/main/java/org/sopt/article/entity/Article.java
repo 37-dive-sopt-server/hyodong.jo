@@ -21,6 +21,7 @@ public class Article {
     @Column(name="article_id")
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String title;
 
     private String content;
