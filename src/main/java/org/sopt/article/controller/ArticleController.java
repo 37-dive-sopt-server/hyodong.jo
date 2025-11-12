@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/articles")
@@ -41,5 +43,10 @@ public class ArticleController {
                 .body(ApiResponse.success(response));
     }
 
-    @GetMapping
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<ArticleListResponse>> searchArticles(@RequestParam String title,@RequestParam String name){
+        ArticleListResponse response = articleService.searchArticles(title,name);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
+    }
 }

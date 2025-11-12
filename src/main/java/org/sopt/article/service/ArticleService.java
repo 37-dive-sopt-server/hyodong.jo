@@ -64,4 +64,17 @@ public class ArticleService  {
         return ArticleListResponse.from(articles);
     }
 
+    @Transactional(readOnly = true)
+    public ArticleListResponse searchArticles(String title,String name) {
+
+        List<Article> articles = articleRepository.findByTitleContainingAndMember_NameContaining(title,name);
+
+        List<ArticleResponse> responses = articles.stream()
+                .map(ArticleResponse::from)
+                .toList();
+
+        return ArticleListResponse.from(responses);
+
+    }
+
 }
