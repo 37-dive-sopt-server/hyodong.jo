@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService{
 
     private final MemberRepository memberRepository;
@@ -39,14 +40,12 @@ public class MemberService{
         return MemberResponse.from(member);
     }
 
-    @Transactional(readOnly = true)
     public MemberResponse findOne(Long memberId) {
         Member member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
         return MemberResponse.from(member);
     }
 
-    @Transactional(readOnly = true)
     public MemberListResponse findAllMembers() {
         List<Member> members = memberRepository.findAll();
         List<MemberResponse> memberResponse = members.stream().map(MemberResponse::from).toList();
@@ -55,7 +54,6 @@ public class MemberService{
 
     }
 
-    @Transactional(readOnly = true)
     public void deleteMember(Long memberId) {
         memberRepository.findById(memberId)
                         .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));

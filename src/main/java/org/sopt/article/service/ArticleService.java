@@ -20,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ArticleService  {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
@@ -40,7 +41,6 @@ public class ArticleService  {
         return ArticleResponse.from(savedArticle);
     }
 
-    @Transactional(readOnly = true)
     public ArticleResponse findArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleException(ErrorCode.ARTICLE_NOT_FOUND));
@@ -48,14 +48,12 @@ public class ArticleService  {
         return ArticleResponse.from(article);
     }
 
-    @Transactional(readOnly = true)
     public ArticleListResponse findAllArticles() {
         List<Article> articles = articleRepository.findAll();
 
         return ArticleListResponse.from(articles);
     }
 
-    @Transactional(readOnly = true)
     public ArticleListResponse searchArticles(String title,String name) {
 
         List<Article> articles = articleRepository.findByTitleContainingAndMember_NameContaining(title,name);
