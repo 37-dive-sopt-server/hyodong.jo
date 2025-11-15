@@ -34,14 +34,7 @@ public class ArticleService  {
         Member member = memberRepository.findById(request.memberId())
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Article article = Article.builder()
-                .title(request.title())
-                .content(request.content())
-                .tag(request.tag())
-                .date(LocalDate.now())
-                .member(member)
-                .build();
-
+        Article article = Article.create(request.title(), request.content(),LocalDate.now(),request.tag(),member);
         Article savedArticle = articleRepository.save(article);
 
         return ArticleResponse.from(savedArticle);
@@ -57,9 +50,7 @@ public class ArticleService  {
 
     @Transactional(readOnly = true)
     public ArticleListResponse findAllArticles() {
-        List<ArticleResponse> articles = articleRepository.findAll().stream()
-                .map(ArticleResponse::from)
-                .toList();
+        List<Article> articles = articleRepository.findAll();
 
         return ArticleListResponse.from(articles);
     }
@@ -69,11 +60,7 @@ public class ArticleService  {
 
         List<Article> articles = articleRepository.findByTitleContainingAndMember_NameContaining(title,name);
 
-        List<ArticleResponse> responses = articles.stream()
-                .map(ArticleResponse::from)
-                .toList();
-
-        return ArticleListResponse.from(responses);
+        return ArticleListResponse.from(articles);
 
     }
 

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public record ArticleResponse(Long id, String title, String content, Tag tag,
                               LocalDate date, Long memberId, String memberName) {
-    public static ArticleResponse from(Article article) {  // 반환 타입 추가!
+    public static ArticleResponse from(Article article) {
         return new ArticleResponse(
                 article.getId(),
                 article.getTitle(),

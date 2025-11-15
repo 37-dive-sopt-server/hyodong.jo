@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.article.dto.request.ArticleCreateRequest;
 import org.sopt.member.entity.Member;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -34,4 +36,17 @@ public class Article {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public static Article create(String title,String content,LocalDate date,Tag tag,Member member) {
+        Article article = Article.builder()
+                .title(title)
+                .content(content)
+                .date(date)
+                .tag(tag)
+                .member(member)
+                .build();
+
+        member.getArticles().add(article);
+        return article;
+    }
 }

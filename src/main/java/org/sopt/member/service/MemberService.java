@@ -1,12 +1,12 @@
 package org.sopt.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.member.dto.response.MemberListResponse;
-import org.sopt.member.entity.Member;
-import org.sopt.member.dto.request.MemberCreateRequest;
-import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.global.exception.ErrorCode;
 import org.sopt.global.exception.domain.member.MemberException;
+import org.sopt.member.dto.request.MemberCreateRequest;
+import org.sopt.member.dto.response.MemberListResponse;
+import org.sopt.member.dto.response.MemberResponse;
+import org.sopt.member.entity.Member;
 import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +48,11 @@ public class MemberService{
 
     @Transactional(readOnly = true)
     public MemberListResponse findAllMembers() {
-        return memberRepository.findAll().stream().map(MemberListResponse::from).toList();
+        List<Member> members = memberRepository.findAll();
+        List<MemberResponse> memberResponse = members.stream().map(MemberResponse::from).toList();
+        return MemberListResponse.from(memberResponse);
+
+
     }
 
     @Transactional(readOnly = true)
