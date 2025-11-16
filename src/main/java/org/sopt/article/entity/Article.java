@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sopt.article.dto.request.ArticleCreateRequest;
 import org.sopt.member.entity.Member;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 

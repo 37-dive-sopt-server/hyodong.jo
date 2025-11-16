@@ -31,5 +31,14 @@ public class Member{
     @OneToMany(mappedBy = "member")
     private List<Article> articles = new ArrayList<>();
 
+    public static Member create(String name,String birth,String email,Gender gender){
+        Member member = Member.builder()
+                .name(name)
+                .birth(birth)
+                .email(email)
+                .gender(gender)
+                .build();
+        return member;
+    }
 }
 

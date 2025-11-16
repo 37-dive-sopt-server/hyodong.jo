@@ -30,12 +30,7 @@ public class MemberService{
         if( age < 20){
             throw new MemberException(ErrorCode.AGE_LOW);
         }
-        Member member = Member.builder()
-                .name(request.name())
-                .birth(request.birth())
-                .email(request.email())
-                .gender(request.gender())
-                .build();
+        Member member = Member.create(request.name(),request.birth(), request.email(),  request.gender());
         memberRepository.save(member);
         return MemberResponse.from(member);
     }
@@ -48,8 +43,7 @@ public class MemberService{
 
     public MemberListResponse findAllMembers() {
         List<Member> members = memberRepository.findAll();
-        List<MemberResponse> memberResponse = members.stream().map(MemberResponse::from).toList();
-        return MemberListResponse.from(memberResponse);
+        return MemberListResponse.from(members);
 
 
     }
