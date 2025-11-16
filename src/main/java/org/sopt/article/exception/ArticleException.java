@@ -1,4 +1,4 @@
-package org.sopt.global.exception.domain.article;
+package org.sopt.article.exception;
 
 import org.sopt.global.exception.BusinessException;
 import org.sopt.global.exception.ErrorCode;

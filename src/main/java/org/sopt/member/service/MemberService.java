@@ -1,12 +1,12 @@
 package org.sopt.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.global.exception.ErrorCode;
-import org.sopt.global.exception.domain.member.MemberException;
+import org.sopt.member.exception.MemberException;
 import org.sopt.member.dto.request.MemberCreateRequest;
 import org.sopt.member.dto.response.MemberListResponse;
 import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.member.entity.Member;
+import org.sopt.member.exception.MemberErrorCode;
 import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class MemberService{
     public MemberResponse findOne(Long memberId) {
 
         Member member =  memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         return MemberResponse.from(member);
     }
@@ -52,7 +52,7 @@ public class MemberService{
     public void deleteMember(Long memberId) {
 
         memberRepository.findById(memberId)
-                        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+                        .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         memberRepository.deleteById(memberId);
     }
@@ -61,7 +61,7 @@ public class MemberService{
     private void validateEmailDuplicate(String email) {
 
         if(memberRepository.existsByEmail(email)) {
-            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
+            throw new MemberException(MemberErrorCode.DUPLICATE_EMAIL);
         }
 
     }
