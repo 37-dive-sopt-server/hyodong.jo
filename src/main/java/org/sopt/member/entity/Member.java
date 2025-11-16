@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.article.entity.Article;
+import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.domain.member.MemberException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,13 @@ public class Member{
                 .gender(gender)
                 .build();
         return member;
+    }
+
+    private static void validateAge(String birth){
+        int age = LocalDate.now().getYear() - LocalDate.parse(birth).getYear();
+        if( age < 20){
+            throw new MemberException(ErrorCode.AGE_LOW);
+        }
     }
 }
 

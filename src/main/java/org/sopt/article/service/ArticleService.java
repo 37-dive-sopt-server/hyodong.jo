@@ -28,27 +28,30 @@ public class ArticleService  {
     @Transactional
     public ArticleResponse createArticle(ArticleCreateRequest request) {
 
-        if(articleRepository.existsByTitle(request.title())){
-            throw new BusinessException(ErrorCode.DUPLICATE_TITLE);
-        }
+        validateTitleExists(request.title());
 
         Member member = memberRepository.findById(request.memberId())
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
         Article article = Article.create(request.title(), request.content(),LocalDate.now(),request.tag(),member);
+
         Article savedArticle = articleRepository.save(article);
 
         return ArticleResponse.from(savedArticle);
+
     }
 
     public ArticleResponse findArticle(Long articleId) {
+
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleException(ErrorCode.ARTICLE_NOT_FOUND));
 
         return ArticleResponse.from(article);
+
     }
 
     public ArticleListResponse findAllArticles() {
+
         List<Article> articles = articleRepository.findAll();
 
         return ArticleListResponse.from(articles);
@@ -59,6 +62,14 @@ public class ArticleService  {
         List<Article> articles = articleRepository.findByTitleContainingAndMember_NameContaining(title,name);
 
         return ArticleListResponse.from(articles);
+
+    }
+
+    private void validateTitleExists(String title) {
+
+        if(articleRepository.existsByTitle(title)){
+            throw new BusinessException(ErrorCode.DUPLICATE_TITLE);
+        }
 
     }
 

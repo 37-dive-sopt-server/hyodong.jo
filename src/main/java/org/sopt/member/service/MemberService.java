@@ -11,7 +11,6 @@ import org.sopt.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,35 +22,49 @@ public class MemberService{
 
     @Transactional
     public MemberResponse join(MemberCreateRequest request) {
-        if(memberRepository.existsByEmail(request.email())) {
-            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
-        }
-        int age = LocalDate.now().getYear() - LocalDate.parse(request.birth()).getYear();
-        if( age < 20){
-            throw new MemberException(ErrorCode.AGE_LOW);
-        }
+
+        validateEmailDuplicate(request.email());
+
         Member member = Member.create(request.name(),request.birth(), request.email(),  request.gender());
+
         memberRepository.save(member);
+
         return MemberResponse.from(member);
     }
 
     public MemberResponse findOne(Long memberId) {
+
         Member member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+
         return MemberResponse.from(member);
     }
 
     public MemberListResponse findAllMembers() {
+
         List<Member> members = memberRepository.findAll();
+
         return MemberListResponse.from(members);
 
 
     }
 
     public void deleteMember(Long memberId) {
+
         memberRepository.findById(memberId)
                         .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+
         memberRepository.deleteById(memberId);
     }
+
+
+    private void validateEmailDuplicate(String email) {
+
+        if(memberRepository.existsByEmail(email)) {
+            throw new MemberException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
+    }
+
 
 }
