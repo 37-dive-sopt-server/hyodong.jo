@@ -25,7 +25,7 @@ public class MemberService{
 
         validateEmailDuplicate(request.email());
 
-        Member member = Member.create(request.name(),request.birth(), request.email(),  request.gender());
+        Member member = Member.create(request.name(),request.birth(), request.email(), request.gender(), request.password());
 
         memberRepository.save(member);
 
@@ -43,7 +43,6 @@ public class MemberService{
     public MemberListResponse findAllMembers() {
 
         List<Member> members = memberRepository.findAll();
-
         return MemberListResponse.from(members);
 
 

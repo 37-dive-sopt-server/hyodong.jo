@@ -29,4 +29,7 @@ dependencies {
 
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // jwt 의존성
+    implementation 'com.auth0:java-jwt:4.4.0'
 }
