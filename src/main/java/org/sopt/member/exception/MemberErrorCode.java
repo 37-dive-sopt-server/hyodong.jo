@@ -1,6 +1,6 @@
 package org.sopt.member.exception;
 
-import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.errorcode.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum MemberErrorCode implements ErrorCode {

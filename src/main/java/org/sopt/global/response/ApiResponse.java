@@ -20,6 +20,10 @@ public class ApiResponse<T> {
         return of("SUCCESS","요청이 성공적으로 처리되었습니다",data);
     }
 
+    public static <T> ApiResponse<T> success(String message,T data) {
+        return of("SUCCESS",message,data);
+    }
+
     public static <T> ApiResponse<T> fail(String code, String message) {
         return of(code,message,null);
     }

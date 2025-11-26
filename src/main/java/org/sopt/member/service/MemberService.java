@@ -62,7 +62,6 @@ public class MemberService{
         if(memberRepository.existsByEmail(email)) {
             throw new MemberException(MemberErrorCode.DUPLICATE_EMAIL);
         }
-
     }
 
 
