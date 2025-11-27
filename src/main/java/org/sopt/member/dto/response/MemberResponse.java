@@ -6,19 +6,19 @@ import org.sopt.member.entity.Member;
 
 public record MemberResponse(
 
-        @Schema(name = "멤버 id", description = "1")
+        @Schema(description= "멤버 id", example = "1")
         Long id,
 
-        @Schema(name = "이름", description = "조효동")
+        @Schema(description = "이름", example = "조효동")
         String name,
 
-        @Schema(name = "생년월일", description = "2001-12-01")
+        @Schema(description = "생년월일", example = "2001-12-01")
         String birth,
 
-        @Schema(name = "이메일", description = "whgyehdjhd@naver.com")
+        @Schema(description = "이메일", example = "whgyehdjhd@naver.com")
         String email,
 
-        @Schema(name = "성별", description = "MALE")
+        @Schema(description = "성별", example = "MALE")
         Gender gender
 ) {
 
