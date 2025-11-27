@@ -8,6 +8,7 @@ import org.sopt.member.dto.response.MemberResponse;
 import org.sopt.member.entity.Member;
 import org.sopt.member.exception.MemberErrorCode;
 import org.sopt.member.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +20,16 @@ import java.util.List;
 public class MemberService{
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberResponse join(MemberCreateRequest request) {
 
         validateEmailDuplicate(request.email());
 
-        Member member = Member.create(request.name(),request.birth(), request.email(), request.gender(), request.password());
+        String encodedPassword = passwordEncoder.encode(request.password());
+
+        Member member = Member.create(request.name(),request.birth(), request.email(), request.gender(),encodedPassword);
 
         memberRepository.save(member);
 

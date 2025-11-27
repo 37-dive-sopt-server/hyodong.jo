@@ -34,6 +34,7 @@ public class Member{
     @OneToMany(mappedBy = "member")
     private List<Article> articles = new ArrayList<>();
 
+    @Column(nullable = false)
     private String password;
 
     public static Member create(String name,String birth,String email,Gender gender,String password){

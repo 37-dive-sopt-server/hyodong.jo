@@ -1,5 +1,6 @@
 package org.sopt.global.config.swagger;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.examples.Example;
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.sopt.global.annotation.BusinessExceptionDescription;
 import org.sopt.global.exception.errorcode.ErrorCode;
 import org.springdoc.core.customizers.OperationCustomizer;
@@ -26,11 +29,26 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
+
+        String jwtSchemeName = "JWT";
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+                .addList(jwtSchemeName);
+
+        Components components = new Components()
+                .addSecuritySchemes(jwtSchemeName,new SecurityScheme()
+                        .name(jwtSchemeName)
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
+
         return new OpenAPI()
                 .info(new Info()
                         .title("SOPT API")
                         .description("SOPT 프로젝트 API 명세서")
-                        .version("1.0.0"));
+                        .version("1.0.0"))
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 
     // == 각 API에 에러 예시 추가 커스터마이저 == //
