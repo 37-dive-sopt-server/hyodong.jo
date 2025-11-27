@@ -2,6 +2,7 @@ package org.sopt.global.config.swagger;
 
 import lombok.Getter;
 import org.sopt.article.exception.ArticleErrorCode;
+import org.sopt.auth.exception.AuthErrorCode;
 import org.sopt.global.exception.errorcode.ErrorCode;
 import org.sopt.global.exception.errorcode.GlobalErrorCode;
 import org.sopt.member.exception.MemberErrorCode;
@@ -33,6 +34,10 @@ public enum SwaggerResponseDescription {
 
     GET_ARTICLE(new LinkedHashSet<>(Set.of(
             ArticleErrorCode.ARTICLE_NOT_FOUND
+    ))),
+
+    REQUEST_LOGIN(new LinkedHashSet<>(Set.of(
+            AuthErrorCode.INVALID_PASSWORD
     )));
 
     private final Set<ErrorCode> errorCodeList;

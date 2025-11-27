@@ -19,5 +19,4 @@ public enum JwtErrorCode implements ErrorCode {
         this.message = message;
     }
 
-
 }
