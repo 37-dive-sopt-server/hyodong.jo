@@ -18,6 +18,8 @@ spring:
     show-sql: true
 
 
-jwt:
-  secret: serverz-fighting-umm-umm....-yes-yes!!!!!
-  expires-in-seconds: 3600
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    accessTokenExpired: ${ACCESS_TOKEN_EXPIRED}
+    refreshTokenExpired: ${REFRESH_TOKEN_EXPIRED}
