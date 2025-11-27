@@ -9,6 +9,7 @@ import org.sopt.article.dto.response.ArticleListResponse;
 import org.sopt.article.dto.response.ArticleResponse;
 import org.sopt.article.service.ArticleService;
 import org.sopt.global.annotation.BusinessExceptionDescription;
+import org.sopt.global.annotation.LoginMemberId;
 import org.sopt.global.config.swagger.SwaggerResponseDescription;
 import org.sopt.global.response.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class ArticleController {
     @PostMapping
     @BusinessExceptionDescription(SwaggerResponseDescription.CREATE_ARTICLE)
     public ResponseEntity<ApiResponse<ArticleResponse>> createArticle(
-            @AuthenticationPrincipal Long memberId,
+            @LoginMemberId Long memberId,
             @Valid @RequestBody ArticleCreateRequest request
     ) {
         ArticleResponse response = articleService.createArticle(memberId,request);
