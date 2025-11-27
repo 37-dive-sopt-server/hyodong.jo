@@ -17,10 +17,6 @@ public record ArticleCreateRequest(
 
         @Schema(description = "태그", example = "CS")
         @NotNull(message = "태그는 필수입니다.")
-        Tag tag,
-
-        @Schema(description = "회원 ID", example = "1")
-        @NotNull(message = "회원 ID는 필수입니다.")
-        Long memberId
+        Tag tag
 ) {
 }

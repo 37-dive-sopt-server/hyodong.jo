@@ -13,6 +13,9 @@ import org.sopt.global.config.swagger.SwaggerResponseDescription;
 import org.sopt.global.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +32,10 @@ public class ArticleController {
     @PostMapping
     @BusinessExceptionDescription(SwaggerResponseDescription.CREATE_ARTICLE)
     public ResponseEntity<ApiResponse<ArticleResponse>> createArticle(
+            @AuthenticationPrincipal Long memberId,
             @Valid @RequestBody ArticleCreateRequest request
     ) {
-        ArticleResponse response = articleService.createArticle(request);
+        ArticleResponse response = articleService.createArticle(memberId,request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
     }
@@ -46,7 +50,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "아티클 전체 조회", description = "전체 아티클을 조회합니다.")
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse<ArticleListResponse>> findAllArticles() {
         ArticleListResponse response = articleService.findAllArticles();
         return ResponseEntity.status(HttpStatus.OK)
