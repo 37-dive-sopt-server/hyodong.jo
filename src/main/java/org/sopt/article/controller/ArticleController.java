@@ -1,6 +1,7 @@
 package org.sopt.article.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class ArticleController {
     @Operation(summary = "아티클 작성", description = "아티클을 작성합니다.")
     @PostMapping
     @BusinessExceptionDescription(SwaggerResponseDescription.CREATE_ARTICLE)
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<ApiResponse<ArticleResponse>> createArticle(
             @LoginMemberId Long memberId,
             @Valid @RequestBody ArticleCreateRequest request

@@ -32,9 +32,6 @@ public class SwaggerConfig {
 
         String jwtSchemeName = "JWT";
 
-        SecurityRequirement securityRequirement = new SecurityRequirement()
-                .addList(jwtSchemeName);
-
         Components components = new Components()
                 .addSecuritySchemes(jwtSchemeName,new SecurityScheme()
                         .name(jwtSchemeName)
@@ -47,7 +44,6 @@ public class SwaggerConfig {
                         .title("SOPT API")
                         .description("SOPT 프로젝트 API 명세서")
                         .version("1.0.0"))
-                .addSecurityItem(securityRequirement)
                 .components(components);
     }
 
