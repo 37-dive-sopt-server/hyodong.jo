@@ -23,3 +23,6 @@ security:
     secret: ${JWT_SECRET}
     accessTokenExpired: ${ACCESS_TOKEN_EXPIRED}
     refreshTokenExpired: ${REFRESH_TOKEN_EXPIRED}
+  kakao:
+    restApiKey: ${KAKAO_REST_API_KEY}
+    redirectUri: ${KAKAO_REDIRECT_URI}

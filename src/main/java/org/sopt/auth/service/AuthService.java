@@ -2,6 +2,7 @@ package org.sopt.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.auth.dto.request.LoginRequest;
+import org.sopt.auth.dto.response.KakaoUserInfoResponse;
 import org.sopt.auth.dto.response.TokenResponse;
 import org.sopt.auth.exception.AuthErrorCode;
 import org.sopt.auth.exception.AuthException;
@@ -22,6 +23,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final KakaoService kakaoService;
 
     public TokenResponse login(LoginRequest request) {
 
@@ -37,4 +39,51 @@ public class AuthService {
 
         return TokenResponse.of(accessToken, refreshToken);
     }
+
+    public TokenResponse kakaoLogin(String code){
+
+        // 1. 인가 코드로 카카오 액세스 토큰 받기
+        String kakaoAccessToken = kakaoService.getAccessToken(code);
+
+        // 2. 카카오 액세스 토큰으로 사용자 정보 가져오기
+        KakaoUserInfoResponse kakaoUserInfoResponse = kakaoService.getUserInfo(kakaoAccessToken);
+
+        // 3. 카카오 사용자 정보로 회원가입 또는 로그인 처리
+        Member member = findOrCreateMember(kakaoUserInfoResponse);
+
+        // 4. JWT 토큰 발급
+        TokenResponse tokenResponse = issueTokens(member);
+
+        return tokenResponse;
+    }
+
+    private Member findOrCreateMember(KakaoUserInfoResponse kakaoUserInfoResponse) {
+
+        return memberRepository.findByEmail(kakaoUserInfoResponse.email())
+                .orElseGet(() -> {
+                    Member newMember = Member.createKakaoMember(
+                            kakaoUserInfoResponse.email(),
+                            kakaoUserInfoResponse.nickname(),
+                            kakaoUserInfoResponse.id()
+                    );
+
+                    return memberRepository.save(newMember);
+                });
+    }
+
+    private TokenResponse issueTokens(Member member) {
+
+        String accessToken = jwtService.generateAccessToken(
+                member.getId(),
+                member.getEmail()
+        );
+
+        String refreshToken = jwtService.generateRefreshToken(
+                member.getId(),
+                member.getEmail()
+        );
+
+        return TokenResponse.of(accessToken, refreshToken);
+    }
 }
+
