@@ -6,10 +6,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.global.jwt.exception.JwtErrorCode;
-import org.sopt.global.jwt.exception.JwtException;
+import org.sopt.global.exception.GlobalException;
+import org.sopt.global.exception.errorcode.GlobalErrorCode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -50,15 +50,15 @@ public class JwtService {
 
             return decodedJWT;
         } catch(TokenExpiredException e){
-            throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
+            throw new GlobalException(GlobalErrorCode.EXPIRED_TOKEN);
         } catch(JWTVerificationException e){
-            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
+            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
     }
 
     public Long getMemberIdFromToken(String token) {
         if(token == null || token.isEmpty()){
-            throw new JwtException(JwtErrorCode.EMPTY_TOKEN);
+            throw new GlobalException(GlobalErrorCode.EMPTY_TOKEN);
         }
         try{
             DecodedJWT decodedJWT = verifyToken(token);
@@ -67,13 +67,13 @@ public class JwtService {
 
             return Long.parseLong(subject);
         } catch(NumberFormatException e){
-            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
+            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
     }
 
     public String getEmailFromToken(String token) {
         if(token == null || token.isEmpty()){
-            throw new JwtException(JwtErrorCode.EMPTY_TOKEN);
+            throw new GlobalException(GlobalErrorCode.EMPTY_TOKEN);
         }
             DecodedJWT decodedJWT = verifyToken(token);
 
