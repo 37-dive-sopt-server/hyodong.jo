@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws IOException, ServletException {
 
         try{
-            String token = extractTokenFromHeader(request);
+            String token = jwtService.extractTokenFromHeader(request);
 
             if(token != null) {
                 Long memberId = jwtService.getMemberIdFromToken(token);
@@ -59,15 +59,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
-    // 헤더에서 JWT추출
-    private String extractTokenFromHeader(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            return null;
-        }
-
-        return authorization.substring(7);
-    }
+    
 }
