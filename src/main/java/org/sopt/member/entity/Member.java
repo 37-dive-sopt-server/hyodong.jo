@@ -51,6 +51,8 @@ public class Member {
 
 
     public static Member create(String name, String birth, String email, Gender gender, String password) {
+        validateAge(birth);
+
         Member member = Member.builder()
                 .name(name)
                 .birth(birth)
