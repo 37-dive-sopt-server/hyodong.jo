@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.sopt.global.exception.GlobalException;
+import org.sopt.global.exception.errorcode.GlobalErrorCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,7 +56,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (GlobalException e) {
+            // JWT 관련 예외
+            request.setAttribute("exception", e.getErrorCode());
+            throw e;
+        } catch (Exception e) {
 
+            request.setAttribute("exception", GlobalErrorCode.INVALID_TOKEN);
+            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
         filterChain.doFilter(request, response);
     }
