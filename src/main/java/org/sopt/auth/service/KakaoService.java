@@ -91,7 +91,7 @@ public class KakaoService {
         // kakao_account 객체 추출
         Map<String, Object> kakaoAccount = (Map<String, Object>) body.get("kakao_account");
         if (kakaoAccount == null) {
-            throw new RuntimeException("카카오 계정 정보를 가져올 수 없습니다.");
+            throw new AuthException(AuthErrorCode.EMPTY_KAKAO_ACCOUNT);
         }
 
         // profile 객체 추출

@@ -11,8 +11,8 @@ public enum AuthErrorCode implements ErrorCode {
 
     // 카카오 로그인 에러
     EMPTY_TOKEN_RESPONSE(HttpStatus.NO_CONTENT,"K001","카카오 토큰 발급 응답이 비어있습니다."),
-    EMPTY_USER_RESPONSE(HttpStatus.NO_CONTENT,"K002","카카오 사용자 정보 응답이 비어있습니다.");
-
+    EMPTY_USER_RESPONSE(HttpStatus.NO_CONTENT,"K002","카카오 사용자 정보 응답이 비어있습니다."),
+    EMPTY_KAKAO_ACCOUNT(HttpStatus.NO_CONTENT,"K003","카카오 계정 정보를 가져올 수 없습니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;
