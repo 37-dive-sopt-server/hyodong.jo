@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtTokenValidator jwtTokenValidator;
 
     @Override
     protected void doFilterInternal(
@@ -35,13 +35,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws IOException, ServletException {
 
-        try{
-            String token = jwtService.extractTokenFromHeader(request);
+        try {
+            String token = jwtTokenValidator.extractTokenFromHeader(request);
 
-            if(token != null) {
-                Long memberId = jwtService.getMemberIdFromToken(token);
+            if (token != null) {
+                Long memberId = jwtTokenValidator.getMemberIdFromToken(token);
 
-                if (!jwtService.isAccessToken(token)) {
+                if (!jwtTokenValidator.isAccessToken(token)) {
                     filterChain.doFilter(request, response);
                     return;
                 }
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch(GlobalException e){
+        } catch (GlobalException e) {
 
         }
         filterChain.doFilter(request, response);

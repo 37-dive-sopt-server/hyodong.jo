@@ -6,7 +6,7 @@ import org.sopt.auth.dto.response.KakaoUserInfoResponse;
 import org.sopt.auth.dto.response.TokenResponse;
 import org.sopt.auth.exception.AuthErrorCode;
 import org.sopt.auth.exception.AuthException;
-import org.sopt.global.jwt.JwtService;
+import org.sopt.global.jwt.JwtTokenProvider;
 import org.sopt.member.entity.Member;
 import org.sopt.member.exception.MemberErrorCode;
 import org.sopt.member.exception.MemberException;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final JwtService jwtService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final KakaoService kakaoService;
 
@@ -34,8 +34,8 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = jwtService.generateAccessToken(member.getId(),member.getEmail());
-        String refreshToken = jwtService.generateRefreshToken(member.getId(),member.getEmail());
+        String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getEmail());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId(), member.getEmail());
 
         return TokenResponse.of(accessToken, refreshToken);
     }
@@ -73,12 +73,12 @@ public class AuthService {
 
     private TokenResponse issueTokens(Member member) {
 
-        String accessToken = jwtService.generateAccessToken(
+        String accessToken = jwtTokenProvider.generateAccessToken(
                 member.getId(),
                 member.getEmail()
         );
 
-        String refreshToken = jwtService.generateRefreshToken(
+        String refreshToken = jwtTokenProvider.generateRefreshToken(
                 member.getId(),
                 member.getEmail()
         );
