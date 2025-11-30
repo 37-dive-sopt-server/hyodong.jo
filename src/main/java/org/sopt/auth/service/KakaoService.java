@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.auth.dto.response.KakaoUserInfoResponse;
 import org.sopt.auth.exception.AuthErrorCode;
 import org.sopt.auth.exception.AuthException;
-import org.sopt.global.config.oauth.KakaoProperties;
-import org.sopt.global.config.oauth.RestTemplateConfig;
+import org.sopt.global.oauth.KakaoProperties;
+import org.sopt.global.oauth.RestTemplateConfig;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,8 +31,8 @@ public class KakaoService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        String restApiKey = kakaoProperties.getRestApiKey();
-        String redirectUri = kakaoProperties.getRedirectUri();
+        String restApiKey = kakaoProperties.restApiKey();
+        String redirectUri = kakaoProperties.redirectUri();
 
         // 카카오 API에 보낼 파라미터 설정
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -101,7 +101,7 @@ public class KakaoService {
         String email = (String) kakaoAccount.get("email");
 
         return new KakaoUserInfoResponse(
-                (Long) body.get("id"),
+                (String) body.get("id"),
                 email,
                 (String) profile.get("nickname")
         );
