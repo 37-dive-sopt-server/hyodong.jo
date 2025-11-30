@@ -1,5 +1,7 @@
 package org.sopt.global.exception;
 
+import org.sopt.global.exception.errorcode.ErrorCode;
+
 public abstract class BusinessException extends RuntimeException {
     private final ErrorCode errorCode;
 

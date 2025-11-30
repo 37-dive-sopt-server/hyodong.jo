@@ -1,6 +1,6 @@
 package org.sopt.article.exception;
 
-import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.errorcode.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum ArticleErrorCode implements ErrorCode {

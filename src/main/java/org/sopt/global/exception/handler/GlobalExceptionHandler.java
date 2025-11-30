@@ -1,18 +1,19 @@
 package org.sopt.global.exception.handler;
 
 import org.sopt.global.exception.BusinessException;
-import org.sopt.global.exception.ErrorCode;
+import org.sopt.global.exception.errorcode.ErrorCode;
+import org.sopt.global.exception.errorcode.GlobalErrorCode;
 import org.sopt.global.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 비즈니스 예외
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
@@ -21,22 +22,29 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.fail(errorCode.getCode(), errorCode.getMessage()));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
+    // DTO 검증 실패
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
+
+        String message = e.getBindingResult() // 검증 결과 객체
+                .getFieldErrors() // 실패 필드 리스트
+                .stream()
+                .findFirst() // 하나만 꺼내기
+                .map(error -> error.getDefaultMessage()) // DTO에서 정의한 에러메세지 추출
+                .orElse(GlobalErrorCode.INVALID_INPUT.getMessage()); // 기본값
+
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.fail("BAD_REQUEST", e.getMessage()));
+                .status(GlobalErrorCode.INVALID_INPUT.getStatus())
+                .body(ApiResponse.fail(GlobalErrorCode.INVALID_INPUT.getCode(), message));
     }
 
-    @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<ApiResponse<Void>> handleDateTimeParseException(DateTimeParseException e) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.fail("BAD_REQUEST", "형식이 올바르지 않습니다. 'yyyy-MM-dd' 형식으로 다시 입력해주세요:"));
-    }
 
+    // 나머지 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.fail("500","서버 내부 오류 발생"));
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR.getCode(),
+                        GlobalErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
     }
 }

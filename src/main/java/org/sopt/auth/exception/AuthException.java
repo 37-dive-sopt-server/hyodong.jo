@@ -1,10 +1,10 @@
-package org.sopt.member.exception;
+package org.sopt.auth.exception;
 
 import org.sopt.global.exception.BusinessException;
 import org.sopt.global.exception.errorcode.ErrorCode;
 
-public class MemberException extends BusinessException {
-    public MemberException(ErrorCode errorCode) {
+public class AuthException extends BusinessException {
+    public AuthException(ErrorCode errorCode) {
         super(errorCode);
     }
 }
