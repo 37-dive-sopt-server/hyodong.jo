@@ -62,12 +62,12 @@ public class Member {
         return member;
     }
 
-    public static Member createKakaoMember(String email, String nickname, Long kakaoId) {
+    public static Member createKakaoMember(String email, String nickname, String kakaoId) {
         Member member = Member.builder()
                 .email(email)
                 .name(nickname)
                 .provider("KAKAO")
-                .providerId(String.valueOf(kakaoId))
+                .providerId(kakaoId)
                 .password(null)
                 .build();
         return member;

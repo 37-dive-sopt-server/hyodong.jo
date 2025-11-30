@@ -59,7 +59,7 @@ public class AuthService {
 
     private Member findOrCreateMember(KakaoUserInfoResponse kakaoUserInfoResponse) {
 
-        return memberRepository.findByEmail(kakaoUserInfoResponse.email())
+        return memberRepository.findByProviderId(kakaoUserInfoResponse.id())
                 .orElseGet(() -> {
                     Member newMember = Member.createKakaoMember(
                             kakaoUserInfoResponse.email(),
