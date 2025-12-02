@@ -17,12 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-
-/**
- * JWT 인증 필터
- * 모든 HTTP 요청마다 실행되어 JWT 토큰을 검증하고
- * SecurityContext에 인증 정보를 저장
- */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -40,12 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtTokenValidator.extractTokenFromHeader(request);
 
             if (token != null) {
-                Long memberId = jwtTokenValidator.getMemberIdFromToken(token);
-
-                if (!jwtTokenValidator.isAccessToken(token)) {
-                    filterChain.doFilter(request, response);
-                    return;
-                }
+                Long memberId = jwtTokenValidator.getMemberIdFromAccessToken(token);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         memberId,
@@ -60,11 +49,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             request.setAttribute("exception", e.getErrorCode());
             throw e;
         } catch (Exception e) {
-
             request.setAttribute("exception", GlobalErrorCode.INVALID_TOKEN);
             throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
         filterChain.doFilter(request, response);
     }
-
 }

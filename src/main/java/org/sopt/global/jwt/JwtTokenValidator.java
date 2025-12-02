@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JwtTokenValidator {
-    
+
     private final Algorithm algorithm;
-    
+
     public JwtTokenValidator(JwtProperties jwtProperties) {
         this.algorithm = Algorithm.HMAC256(jwtProperties.secret());
     }
-    
+
     public DecodedJWT verifyToken(String token) {
         try {
             return JWT.require(algorithm)
@@ -30,20 +30,45 @@ public class JwtTokenValidator {
             throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
     }
-    
-    public Long getMemberIdFromToken(String token) {
+
+    public Long getMemberIdFromAccessToken(String token) {
         if (token == null || token.isEmpty()) {
             throw new GlobalException(GlobalErrorCode.EMPTY_TOKEN);
         }
+
+        DecodedJWT decodedJWT = verifyToken(token);
+
+        String type = decodedJWT.getClaim("type").asString();
+        if (!"access".equals(type)) {
+            throw new GlobalException(GlobalErrorCode.INVALID_ACCESS_TOKEN);
+        }
+
         try {
-            DecodedJWT decodedJWT = verifyToken(token);
-            String subject = decodedJWT.getSubject();
-            return Long.parseLong(subject);
+            return Long.parseLong(decodedJWT.getSubject());
+        } catch (NumberFormatException e) {
+            throw new GlobalException(GlobalErrorCode.INVALID_ACCESS_TOKEN);
+        }
+    }
+
+    public Long getMemberIdFromRefreshToken(String token) {
+        if (token == null || token.isEmpty()) {
+            throw new GlobalException(GlobalErrorCode.EMPTY_TOKEN);
+        }
+
+        DecodedJWT decodedJWT = verifyToken(token);
+
+        String type = decodedJWT.getClaim("type").asString();
+        if (!"refresh".equals(type)) {
+            throw new GlobalException(GlobalErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        try {
+            return Long.parseLong(decodedJWT.getSubject());
         } catch (NumberFormatException e) {
             throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
     }
-    
+
     public String getEmailFromToken(String token) {
         if (token == null || token.isEmpty()) {
             throw new GlobalException(GlobalErrorCode.EMPTY_TOKEN);
@@ -51,26 +76,14 @@ public class JwtTokenValidator {
         DecodedJWT decodedJWT = verifyToken(token);
         return decodedJWT.getClaim("email").asString();
     }
-    
-    public boolean isAccessToken(String token) {
-        DecodedJWT decodedJWT = verifyToken(token);
-        String type = decodedJWT.getClaim("type").asString();
-        return "access".equals(type);
-    }
-    
-    public boolean isRefreshToken(String token) {
-        DecodedJWT decodedJWT = verifyToken(token);
-        String type = decodedJWT.getClaim("type").asString();
-        return "refresh".equals(type);
-    }
-    
+
     public String extractTokenFromHeader(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
-        
+
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             return null;
         }
-        
+
         return authorization.substring(7);
     }
 }
