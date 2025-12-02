@@ -46,7 +46,7 @@ public class JwtTokenValidator {
         try {
             return Long.parseLong(decodedJWT.getSubject());
         } catch (NumberFormatException e) {
-            throw new GlobalException(GlobalErrorCode.INVALID_ACCESS_TOKEN);
+            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
         }
     }
 
@@ -65,7 +65,7 @@ public class JwtTokenValidator {
         try {
             return Long.parseLong(decodedJWT.getSubject());
         } catch (NumberFormatException e) {
-            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
+            throw new GlobalException(GlobalErrorCode.INVALID_ACCESS_TOKEN);
         }
     }
 

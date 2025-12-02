@@ -31,10 +31,10 @@ public class AuthService {
 
     public TokenResponse login(LoginRequest request) {
 
-        Member member = memberRepository.findByEmail(request.email())
+        Member member = memberRepository.findByEmailAndProvider(request.email(),"LOCAL")
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        if(!passwordEncoder.matches(request.password(), member.getPassword())) {
+        if(member.getPassword() == null || !passwordEncoder.matches(request.password(), member.getPassword())) {
             throw new AuthException(AuthErrorCode.INVALID_PASSWORD);
         }
 

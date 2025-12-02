@@ -22,17 +22,18 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private static final String[] ALLOWED_PATH={
+            "/auth/**","/members/**","/articles/all","/articles/{id}","/articles/search",
+            "/swagger-ui/**","/v3/api-docs/**","/*.html", "/static/**", "/css/**", "/js/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/members/**").permitAll()
-                        .requestMatchers("/articles/all","/articles/{id}","/articles/search").permitAll()
-                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
-                        .requestMatchers("/*.html", "/static/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers(ALLOWED_PATH).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
