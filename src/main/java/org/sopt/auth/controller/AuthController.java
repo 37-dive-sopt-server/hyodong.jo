@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.auth.dto.request.KakaoLoginRequest;
 import org.sopt.auth.dto.request.LoginRequest;
+import org.sopt.auth.dto.request.RefreshTokenRequest;
 import org.sopt.auth.dto.response.TokenResponse;
 import org.sopt.auth.service.AuthService;
 import org.sopt.global.annotation.BusinessExceptionDescription;
@@ -37,6 +38,15 @@ public class AuthController {
             @Valid @RequestBody KakaoLoginRequest request
     ) {
         TokenResponse tokenResponse = authService.kakaoLogin(request.code());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(tokenResponse));
+    }
+
+    @Operation(summary = "액세스 토큰 갱신" , description = "리프레쉬 토큰으로 액세스 토큰을 재발급합니다.")
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<TokenResponse>> refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request
+    ){
+        TokenResponse tokenResponse = authService.refreshToken(request.refreshToken());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(tokenResponse));
     }
 

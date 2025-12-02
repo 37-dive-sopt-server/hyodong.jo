@@ -6,7 +6,10 @@ import org.sopt.auth.dto.response.KakaoUserInfoResponse;
 import org.sopt.auth.dto.response.TokenResponse;
 import org.sopt.auth.exception.AuthErrorCode;
 import org.sopt.auth.exception.AuthException;
+import org.sopt.global.exception.GlobalException;
+import org.sopt.global.exception.errorcode.GlobalErrorCode;
 import org.sopt.global.jwt.JwtTokenProvider;
+import org.sopt.global.jwt.JwtTokenValidator;
 import org.sopt.member.entity.Member;
 import org.sopt.member.exception.MemberErrorCode;
 import org.sopt.member.exception.MemberException;
@@ -22,6 +25,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenValidator jwtTokenValidator;
     private final PasswordEncoder passwordEncoder;
     private final KakaoService kakaoService;
 
@@ -57,6 +61,24 @@ public class AuthService {
         return tokenResponse;
     }
 
+    public TokenResponse refreshToken(String refreshToken) {
+        // 1. 리프레시 토큰인지 검증, 타입 확인, id추출
+        Long memberId = jwtTokenValidator.getMemberIdFromRefreshToken(refreshToken);
+
+        // 2. 회원 조회
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        // 3. 새로운 액세스 토큰 발급
+        String newAccessToken = jwtTokenProvider.generateAccessToken(
+                member.getId(),
+                member.getEmail()
+        );
+
+        return TokenResponse.of(newAccessToken, refreshToken);
+    }
+
+
     private Member findOrCreateMember(KakaoUserInfoResponse kakaoUserInfoResponse) {
 
         return memberRepository.findByProviderId(kakaoUserInfoResponse.id())
@@ -70,6 +92,7 @@ public class AuthService {
                     return memberRepository.save(newMember);
                 });
     }
+
 
     private TokenResponse issueTokens(Member member) {
 
