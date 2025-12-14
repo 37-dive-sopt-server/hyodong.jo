@@ -39,6 +39,7 @@ public class Article {
     private Member member;
 
     @OneToMany(mappedBy = "article")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     public static Article create(String title,String content,LocalDate date,Tag tag,Member member) {

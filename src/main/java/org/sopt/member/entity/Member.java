@@ -39,6 +39,7 @@ public class Member {
     private Gender gender;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
     @Column(nullable = true)
@@ -51,6 +52,7 @@ public class Member {
     private String providerId; // 카카오 회원번호를 위한 필드
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
 
