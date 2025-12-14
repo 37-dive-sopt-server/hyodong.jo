@@ -2,17 +2,14 @@ package org.sopt.comment.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.sopt.article.entity.Article;
 import org.sopt.member.entity.Member;
 
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class Comment {
 
@@ -31,4 +28,17 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public static Comment create(String content, Article article, Member member) {
+        Comment comment = Comment.builder()
+                .content(content)
+                .article(article)
+                .member(member)
+                .build();
+
+        article.getComments().add(comment);
+        member.getComments().add(comment);
+
+        return comment;
+    }
 }
