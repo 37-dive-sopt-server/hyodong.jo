@@ -33,24 +33,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = jwtTokenValidator.extractTokenFromHeader(request);
 
-            if (token != null) {
-                Long memberId = jwtTokenValidator.getMemberIdFromAccessToken(token);
+            if (token == null || token.isEmpty()) {
+                request.setAttribute("exception", GlobalErrorCode.EMPTY_TOKEN);
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        memberId,
-                        null,
-                        List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                );
+            Long memberId = jwtTokenValidator.getMemberIdFromAccessToken(token);
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    memberId,
+                    null,
+                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
+            );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
         } catch (GlobalException e) {
             // JWT 관련 예외
             request.setAttribute("exception", e.getErrorCode());
-            throw e;
+
         } catch (Exception e) {
             request.setAttribute("exception", GlobalErrorCode.INVALID_TOKEN);
-            throw new GlobalException(GlobalErrorCode.INVALID_TOKEN);
+
         }
         filterChain.doFilter(request, response);
     }
