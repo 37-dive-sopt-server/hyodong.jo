@@ -3,11 +3,13 @@ package org.sopt.global.config.swagger;
 import lombok.Getter;
 import org.sopt.article.exception.ArticleErrorCode;
 import org.sopt.auth.exception.AuthErrorCode;
+import org.sopt.comment.exception.CommentErrorCode;
 import org.sopt.global.exception.errorcode.ErrorCode;
 import org.sopt.global.exception.errorcode.GlobalErrorCode;
 import org.sopt.member.exception.MemberErrorCode;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 @Getter
@@ -38,6 +40,16 @@ public enum SwaggerResponseDescription {
 
     REQUEST_LOGIN(new LinkedHashSet<>(Set.of(
             AuthErrorCode.INVALID_PASSWORD
+    ))),
+
+    CREATE_COMMENT(new LinkedHashSet<>(Set.of(
+            MemberErrorCode.MEMBER_NOT_FOUND,
+            ArticleErrorCode.ARTICLE_NOT_FOUND,
+            CommentErrorCode.COMMENT_NOT_FOUND
+    ))),
+
+    GET_COMMENT(new LinkedHashSet<>(Set.of(
+            ArticleErrorCode.ARTICLE_NOT_FOUND
     )));
 
     private final Set<ErrorCode> errorCodeList;
