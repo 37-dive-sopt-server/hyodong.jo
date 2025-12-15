@@ -3,6 +3,7 @@ package org.sopt.global.config.swagger;
 import lombok.Getter;
 import org.sopt.article.exception.ArticleErrorCode;
 import org.sopt.auth.exception.AuthErrorCode;
+import org.sopt.comment.entity.Comment;
 import org.sopt.comment.exception.CommentErrorCode;
 import org.sopt.global.exception.errorcode.ErrorCode;
 import org.sopt.global.exception.errorcode.GlobalErrorCode;
@@ -50,6 +51,18 @@ public enum SwaggerResponseDescription {
 
     GET_COMMENT(new LinkedHashSet<>(Set.of(
             ArticleErrorCode.ARTICLE_NOT_FOUND
+    ))),
+
+    UPDATE_COMMENT(new LinkedHashSet<>(Set.of(
+             CommentErrorCode.COMMENT_NOT_FOUND,
+             CommentErrorCode.COMMENT_NOT_MATCH_ARTICLE,
+             CommentErrorCode.NOT_COMMENT_OWNER
+    ))),
+
+    DELETE_COMMENT(new LinkedHashSet<>(Set.of(
+            CommentErrorCode.COMMENT_NOT_FOUND,
+            CommentErrorCode.COMMENT_NOT_MATCH_ARTICLE,
+            CommentErrorCode.NOT_COMMENT_OWNER
     )));
 
     private final Set<ErrorCode> errorCodeList;
