@@ -3,8 +3,10 @@ package org.sopt.comment.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.comment.dto.request.CommentCreateRequest;
+import org.sopt.comment.dto.request.CommentUpdateRequest;
 import org.sopt.comment.dto.response.CommentListResponse;
 import org.sopt.comment.dto.response.CommentResponse;
 import org.sopt.comment.service.CommentService;
@@ -17,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/articles")
 @RequiredArgsConstructor
 @Tag(name = "댓글", description = "댓글 작성 / 조회 등 관리 API")
 public class CommentController {
@@ -25,21 +27,46 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(summary = "댓글 작성", description = "로그인한 회원이 아티클에 댓글을 작성합니다")
-    @PostMapping("/{articleId}")
+    @PostMapping("/{articleId}/comments")
     @BusinessExceptionDescription(SwaggerResponseDescription.CREATE_COMMENT)
     @SecurityRequirement(name = "JWT")
     public ResponseEntity<ApiResponse<CommentResponse>> createComment(@LoginMemberId Long memberId,
                                                                           @PathVariable Long articleId,
-                                                                          CommentCreateRequest request) {
+                                                                          @Valid @RequestBody CommentCreateRequest request) {
         CommentResponse response = commentService.createComment(memberId,articleId,request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
     @Operation(summary = "댓글 조회", description = "특정 아티클의 댓글을 조회합니다.")
-    @GetMapping("{articleId}")
+    @GetMapping("/{articleId}/comments")
     @BusinessExceptionDescription(SwaggerResponseDescription.GET_COMMENT)
     public ResponseEntity<ApiResponse<CommentListResponse>> findComment(@PathVariable Long articleId) {
         CommentListResponse responses = commentService.findComment(articleId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(responses));
+    }
+
+    @Operation(summary = "댓글 수정", description = "특정 아티클의 댓글을 수정합니다.")
+    @PatchMapping("/{articleId}/comments/{commentId}")
+    @SecurityRequirement(name = "JWT")
+    @BusinessExceptionDescription(SwaggerResponseDescription.UPDATE_COMMENT)
+    public ResponseEntity<ApiResponse<CommentResponse>> updateComment(@LoginMemberId Long memberId,
+                                                                      @PathVariable Long articleId,
+                                                                      @PathVariable Long commentId,
+                                                                      @Valid @RequestBody CommentUpdateRequest request
+                                                                      ){
+        CommentResponse response = commentService.updateComment(memberId,articleId,commentId,request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @Operation(summary = "댓글 삭제", description = "특정 아티클의 댓글을 삭제합니다.")
+    @DeleteMapping("/{articleId}/comments/{commentId}")
+    @SecurityRequirement(name = "JWT")
+    @BusinessExceptionDescription(SwaggerResponseDescription.DELETE_COMMENT)
+    public ResponseEntity<ApiResponse<Void>> deleteComment(@LoginMemberId Long memberId,
+                                                           @PathVariable Long articleId,
+                                                            @PathVariable Long commentId) {
+        commentService.deleteComment(memberId,articleId,commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 }

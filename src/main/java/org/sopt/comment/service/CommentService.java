@@ -6,9 +6,12 @@ import org.sopt.article.exception.ArticleErrorCode;
 import org.sopt.article.exception.ArticleException;
 import org.sopt.article.repository.ArticleRepository;
 import org.sopt.comment.dto.request.CommentCreateRequest;
+import org.sopt.comment.dto.request.CommentUpdateRequest;
 import org.sopt.comment.dto.response.CommentListResponse;
 import org.sopt.comment.dto.response.CommentResponse;
 import org.sopt.comment.entity.Comment;
+import org.sopt.comment.exception.CommentErrorCode;
+import org.sopt.comment.exception.CommentException;
 import org.sopt.comment.repository.CommentRepository;
 import org.sopt.member.entity.Member;
 import org.sopt.member.exception.MemberErrorCode;
@@ -35,7 +38,7 @@ public class CommentService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleException(ArticleErrorCode.ARTICLE_NOT_FOUND));
 
-        Comment comment = Comment.create(request.content(),article,member);
+        Comment comment = Comment.create(request.content(), article, member);
 
         Comment savedComment = commentRepository.save(comment);
 
@@ -43,7 +46,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public CommentListResponse findComment(Long articleId){
+    public CommentListResponse findComment(Long articleId) {
 
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleException(ArticleErrorCode.ARTICLE_NOT_FOUND));
@@ -51,5 +54,44 @@ public class CommentService {
         List<Comment> comments = commentRepository.findByArticleId(articleId);
 
         return CommentListResponse.from(comments);
+    }
+
+    public CommentResponse updateComment(Long memberId, Long articleId, Long commentId, CommentUpdateRequest request) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        // 아티클 일치 확인
+        if (!comment.getArticle().getId().equals(articleId)) {
+            throw new CommentException(CommentErrorCode.COMMENT_NOT_MATCH_ARTICLE);
+        }
+
+        // 작성자 확인
+        if (!comment.getMember().getId().equals(memberId)) {
+            throw new CommentException(CommentErrorCode.NOT_COMMENT_OWNER);
+        }
+
+        comment.updateContent(request.content());
+
+        return CommentResponse.from(comment);
+
+    }
+
+    public void deleteComment(Long memberId, Long articleId, Long commentId) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        // 게시글 일치 확인
+        if (!comment.getArticle().getId().equals(articleId)) {
+            throw new CommentException(CommentErrorCode.COMMENT_NOT_MATCH_ARTICLE);
+        }
+
+        // 작성자 확인
+        if (!comment.getMember().getId().equals(memberId)) {
+            throw new CommentException(CommentErrorCode.NOT_COMMENT_OWNER);
+        }
+
+        commentRepository.delete(comment);
     }
 }
