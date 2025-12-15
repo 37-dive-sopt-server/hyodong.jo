@@ -17,6 +17,29 @@ spring:
         format_sql: true
     show-sql: true
 
+  # Redis 설정
+  data:
+    redis:
+      host: ${REDIS_HOST} # Redis 서버 주소
+      port: ${REDIS_PORT} # Redis 포트
+      password: ${REDIS_PASSWORD}
+
+  # 캐시 설정
+  cache:
+    type: redis # 캐시 구현체로 Redis 사용
+
+cache:
+  ttl:
+    default-ttl: ${CACHE_TTL_DEFAULT:600000}
+    article-detail: ${CACHE_TTL_ARTICLE_DETAIL}
+    article-list: ${CACHE_TTL_ARTICLE_LIST}
+
+logging:
+  level:
+    org.springframework.cache: TRACE
+    org.springframework.cache.interceptor.CacheInterceptor: TRACE
+
+
 
 security:
   jwt:
