@@ -32,6 +32,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // validation 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
