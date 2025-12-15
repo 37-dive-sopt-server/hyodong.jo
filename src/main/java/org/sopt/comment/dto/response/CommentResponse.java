@@ -10,9 +10,6 @@ public record CommentResponse(
         // 댓글 내용
         String content,
 
-        // 댓글 단 아티클 제목
-        String articleTitle,
-
         // 댓글 작성자 멤버 id
         Long memberId,
 
@@ -24,7 +21,6 @@ public record CommentResponse(
         return new CommentResponse(
                 comment.getId(),
                 comment.getContent(),
-                comment.getArticle().getTitle(),
                 comment.getMember().getId(),
                 comment.getMember().getName()
         );

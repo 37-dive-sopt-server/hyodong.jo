@@ -3,8 +3,10 @@ package org.sopt.article.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.sopt.article.entity.Article;
 import org.sopt.article.entity.Tag;
+import org.sopt.comment.dto.response.CommentResponse;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ArticleResponse(
 
@@ -27,9 +29,17 @@ public record ArticleResponse(
         Long memberId,
 
         @Schema(description = "작성자 이름", example = "조효동")
-        String memberName
+        String memberName,
+
+        @Schema(description = "댓글 목록", example = "1등")
+        List<CommentResponse> comments
 ) {
     public static ArticleResponse from(Article article) {
+
+        List<CommentResponse> comments = article.getComments().stream()
+                .map(CommentResponse::from)
+                .toList();
+
         return new ArticleResponse(
                 article.getId(),
                 article.getTitle(),
@@ -37,7 +47,8 @@ public record ArticleResponse(
                 article.getTag(),
                 article.getDate(),
                 article.getMember().getId(),
-                article.getMember().getName()
+                article.getMember().getName(),
+                comments
         );
     }
 }
