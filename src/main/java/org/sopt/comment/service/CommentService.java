@@ -17,11 +17,14 @@ import org.sopt.member.entity.Member;
 import org.sopt.member.exception.MemberErrorCode;
 import org.sopt.member.exception.MemberException;
 import org.sopt.member.repository.MemberRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -30,6 +33,12 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final ArticleRepository articleRepository;
 
+    // 댓글 작성 시 아티클 상세, 아티클 목록 캐시 모두 무효화
+    @Caching(evict = {
+            @CacheEvict(value = "articleDetail", key = "#articleId"),
+            @CacheEvict(value = "articleList", key = "'all'")
+    })
+    @Transactional
     public CommentResponse createComment(Long memberId, Long articleId, CommentCreateRequest request) {
 
         Member member = memberRepository.findById(memberId)
@@ -45,7 +54,6 @@ public class CommentService {
         return CommentResponse.from(savedComment);
     }
 
-    @Transactional(readOnly = true)
     public CommentListResponse findComment(Long articleId) {
 
         Article article = articleRepository.findById(articleId)
@@ -56,6 +64,12 @@ public class CommentService {
         return CommentListResponse.from(comments);
     }
 
+    // 댓글 수정 시 해당 아티클 캐시 삭제
+    @Caching(evict = {
+            @CacheEvict(value = "articleDetail", key = "#articleId"),
+            @CacheEvict(value = "articleList", key = "'all'")
+    })
+    @Transactional
     public CommentResponse updateComment(Long memberId, Long articleId, Long commentId, CommentUpdateRequest request) {
 
         Comment comment = commentRepository.findById(commentId)
@@ -77,6 +91,12 @@ public class CommentService {
 
     }
 
+    // 댓글 삭제 시 해당 아티클 캐시 삭제
+    @Caching(evict = {
+            @CacheEvict(value = "articleDetail", key = "#articleId"),
+            @CacheEvict(value = "articleList", key = "'all'")
+    })
+    @Transactional
     public void deleteComment(Long memberId, Long articleId, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)

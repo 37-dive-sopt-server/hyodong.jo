@@ -24,7 +24,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private static final String[] ALLOWED_PATH={
-            "/auth/**","/members/**","/articles/all","/articles/{id}","/articles/search",
+            "/auth/**","/members/**","/articles/all","/articles/**","/articles/search",
             "/swagger-ui/**","/v3/api-docs/**","/*.html", "/static/**", "/css/**", "/js/**"
     };
 
