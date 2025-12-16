@@ -7,9 +7,14 @@ import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.cache.interceptor.SimpleCacheErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -24,12 +29,37 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Configuration
 @EnableCaching
 @RequiredArgsConstructor
-public class RedisConfig {
+public class RedisConfig implements CachingConfigurer {
 
     private final CacheTtlProperties cacheTtlProperties;
+
+    @Override
+    public CacheErrorHandler errorHandler() {
+
+        return new SimpleCacheErrorHandler() {
+            @Override
+            public void handleCacheGetError(RuntimeException exception, Cache cache, Object key) {
+                // Get 하다가 에러 나면 로그만 찍고 넘어감 -> DB 조회로 감
+                log.warn("Redis Connection Error (GET): {}", exception.getMessage());
+            }
+
+            @Override
+            public void handleCachePutError(RuntimeException exception, Cache cache, Object key, Object value) {
+                // Put 하다가 에러 나면 로그만 찍고 넘어감
+                log.warn("Redis Connection Error (PUT): {}", exception.getMessage());
+            }
+
+            @Override
+            public void handleCacheEvictError(RuntimeException exception, Cache cache, Object key) {
+                // Evict(삭제) 하다가 에러 나면 로그만 찍고 넘어감
+                log.warn("Redis Connection Error (EVICT): {}", exception.getMessage());
+            }
+        };
+    }
 
     @Bean
     public ObjectMapper redisObjectMapper() {

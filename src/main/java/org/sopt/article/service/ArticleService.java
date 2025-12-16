@@ -50,7 +50,7 @@ public class ArticleService  {
     @Cacheable(value = "articleDetail", key = "#articleId")
     public ArticleResponse findArticle(Long articleId) {
 
-        log.info(">>>> [Cache Miss - DB Access] findArticle method executed for articleId: {}", articleId);
+        log.info("[CACHE MISS] DB 조회 아티클 ID: {}", articleId);
 
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleException(ArticleErrorCode.ARTICLE_NOT_FOUND));
@@ -62,6 +62,8 @@ public class ArticleService  {
     // 아티클 전체 조회 (댓글 개수만) 캐싱
     @Cacheable(value = "articleList", key = "'all'")
     public ArticleListResponse findAllArticles() {
+
+        log.info("[CACHE MISS] DB 조회 - 전체 아티클 목록");
 
         List<Article> articles = articleRepository.findAll();
 
