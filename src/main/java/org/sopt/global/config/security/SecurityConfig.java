@@ -24,8 +24,17 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private static final String[] ALLOWED_PATH={
-            "/auth/**","/members/**","/articles/all","/articles/**","/articles/search",
-            "/swagger-ui/**","/v3/api-docs/**","/*.html", "/static/**", "/css/**", "/js/**"
+            "/auth/**",
+            "/members/**",
+
+            "/articles/all",
+            "/articles/**",
+            "/articles/search",
+
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+
+            "/*.html", "/static/**", "/css/**", "/js/**"
     };
 
     @Bean

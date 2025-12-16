@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.sopt.global.annotation.BusinessExceptionDescription;
 import org.sopt.global.exception.errorcode.ErrorCode;
@@ -81,18 +80,18 @@ public class SwaggerConfig {
         Set<ErrorCode> errorCodeList = type.getErrorCodeList();
 
         // 3. 각 에러 코드 ExampleHolder로 변환 및 HTTP 상태별 그룹핑
-        Map<Integer, List<org.sopt.__sopkathon.global.config.swagger.ExampleHolder>> statusWithExampleHolders =
+        Map<Integer, List<org.sopt.global.config.swagger.ExampleHolder>> statusWithExampleHolders =
                 errorCodeList.stream()
                         .map(
                                 errorCode -> {
-                                    return org.sopt.__sopkathon.global.config.swagger.ExampleHolder.builder()
+                                    return org.sopt.global.config.swagger.ExampleHolder.builder()
                                             .holder(
                                                     getSwaggerExample(errorCode)) // ErrorCode -> Swagger Example
                                             .code(errorCode.getStatus().value()) // 404
                                             .name(errorCode.toString()) // M001
                                             .build();
                                 }
-                        ).collect(groupingBy(org.sopt.__sopkathon.global.config.swagger.ExampleHolder::getCode));
+                        ).collect(groupingBy(org.sopt.global.config.swagger.ExampleHolder::getCode));
 
         // 4. 스웨거에 추가
         addExamplesToResponses(responses, statusWithExampleHolders);
@@ -125,7 +124,7 @@ public class SwaggerConfig {
     // Swagger에 Example 추가
     private void addExamplesToResponses(
             ApiResponses responses,
-            Map<Integer, List<org.sopt.__sopkathon.global.config.swagger.ExampleHolder>> statusWithExampleHolders) {
+            Map<Integer, List<org.sopt.global.config.swagger.ExampleHolder>> statusWithExampleHolders) {
 
         // HTTP 상태 코드별 처리
         statusWithExampleHolders.forEach(

@@ -49,3 +49,15 @@ security:
   kakao:
     restApiKey: ${KAKAO_REST_API_KEY}
     redirectUri: ${KAKAO_REDIRECT_URI}
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    path: /v3/api-docs # API 명세서 JSON 경로 설정
+  swagger-ui:
+    path: /swagger-ui # Swagger UI 접속 경로 (localhost:8080/swagger-ui)
+    url: /v3/api-docs # ⭐️ 가장 중요! Swagger에게 읽어올 문서 위치를 강제로 지정
+    disable-swagger-default-url: true # 기본 Petstore URL 비활성화
+    operations-sorter: method # API 목록을 HTTP Method 순서로 정렬
+    display-request-duration: true # 요청 보냈을 때 걸린 시간 표시 (디버깅용)
