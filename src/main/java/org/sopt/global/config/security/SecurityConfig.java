@@ -23,7 +23,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private static final String[] ALLOWED_PATH={
+    private static final String[] ALLOWED_PATH = {
             "/auth/**",
             "/members/**",
 

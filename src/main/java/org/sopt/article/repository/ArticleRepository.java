@@ -1,6 +1,7 @@
 package org.sopt.article.repository;
 
 import org.sopt.article.entity.Article;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
