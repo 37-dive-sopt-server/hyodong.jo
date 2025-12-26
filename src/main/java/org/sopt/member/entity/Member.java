@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.article.entity.Article;
+import org.sopt.comment.entity.Comment;
 import org.sopt.member.exception.MemberException;
 import org.sopt.member.exception.MemberErrorCode;
 
@@ -38,6 +39,7 @@ public class Member {
     private Gender gender;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
     @Column(nullable = true)
@@ -48,6 +50,10 @@ public class Member {
 
     @Column(name = "provider_id")
     private String providerId; // 카카오 회원번호를 위한 필드
+
+    @OneToMany(mappedBy = "member")
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
 
     public static Member create(String name, String birth, String email, Gender gender, String password) {

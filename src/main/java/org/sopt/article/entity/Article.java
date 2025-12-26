@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.comment.entity.Comment;
 import org.sopt.member.entity.Member;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +37,10 @@ public class Article {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "article")
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     public static Article create(String title,String content,LocalDate date,Tag tag,Member member) {
         Article article = Article.builder()

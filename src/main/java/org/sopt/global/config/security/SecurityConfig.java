@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.global.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,9 +23,18 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private static final String[] ALLOWED_PATH={
-            "/auth/**","/members/**","/articles/all","/articles/{id}","/articles/search",
-            "/swagger-ui/**","/v3/api-docs/**","/*.html", "/static/**", "/css/**", "/js/**"
+    private static final String[] ALLOWED_PATH = {
+            "/auth/**",
+            "/members/**",
+
+            "/articles/all",
+            "/articles/**",
+            "/articles/search",
+
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+
+            "/*.html", "/static/**", "/css/**", "/js/**"
     };
 
     @Bean
@@ -34,6 +44,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(ALLOWED_PATH).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/articles/{articleId}/comments").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

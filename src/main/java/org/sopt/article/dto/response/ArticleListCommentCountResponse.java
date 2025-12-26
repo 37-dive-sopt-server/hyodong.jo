@@ -3,12 +3,10 @@ package org.sopt.article.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.sopt.article.entity.Article;
 import org.sopt.article.entity.Tag;
-import org.sopt.comment.dto.response.CommentResponse;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public record ArticleResponse(
+public record ArticleListCommentCountResponse(
 
         @Schema(description = "아티클 ID", example = "1")
         Long id,
@@ -31,16 +29,12 @@ public record ArticleResponse(
         @Schema(description = "작성자 이름", example = "조효동")
         String memberName,
 
-        @Schema(description = "댓글 목록", example = "1등")
-        List<CommentResponse> comments
+        @Schema(description = "댓글 개수", example = "30")
+        int commentCount
 ) {
-    public static ArticleResponse from(Article article) {
+    public static ArticleListCommentCountResponse from(Article article) {
 
-        List<CommentResponse> comments = article.getComments().stream()
-                .map(CommentResponse::from)
-                .toList();
-
-        return new ArticleResponse(
+        return new ArticleListCommentCountResponse(
                 article.getId(),
                 article.getTitle(),
                 article.getContent(),
@@ -48,7 +42,7 @@ public record ArticleResponse(
                 article.getDate(),
                 article.getMember().getId(),
                 article.getMember().getName(),
-                comments
+                article.getComments().size()
         );
     }
 }

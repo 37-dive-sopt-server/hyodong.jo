@@ -4,11 +4,11 @@ import org.sopt.article.entity.Article;
 
 import java.util.List;
 
-public record ArticleListResponse(List<ArticleResponse> articles) {
+public record ArticleListResponse(List<ArticleListCommentCountResponse> articles) {
 
     public static ArticleListResponse from(List<Article> articles) {
-        List<ArticleResponse> articleResponses = articles.stream()
-                .map(ArticleResponse::from)
+        List<ArticleListCommentCountResponse> articleResponses = articles.stream()
+                .map(ArticleListCommentCountResponse::from)
                 .toList();
 
         return new ArticleListResponse(articleResponses);
